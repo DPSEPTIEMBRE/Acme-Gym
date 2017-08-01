@@ -19,12 +19,12 @@
 	<!-- User accounts -->
 
 	<bean id="userAccount1" class="security.UserAccount">
-		<property name="username" value="admin" />
+		<property name="username" value="administrator" />
 		<property name="password" value="21232f297a57a5a743894a0e4a801fc3" />
 		<property name="authorities">
 			<list>
 				<bean class="security.Authority">
-					<property name="authority" value="ADMIN" />
+					<property name="authority" value="ADMINISTRATOR" />
 				</bean>
 			</list>
 		</property>
@@ -41,6 +41,8 @@
 			</list>
 		</property>
 	</bean>
+	
+	
 
 	<bean id="userAccount3" class="security.UserAccount">
 		<property name="username" value="super" />
@@ -48,8 +50,26 @@
 		<property name="authorities">
 			<list>
 				<bean class="security.Authority">
-					<property name="authority" value="ADMIN" />
+					<property name="authority" value="ADMINISTRATOR" />
 				</bean>
+				<bean class="security.Authority">
+					<property name="authority" value="CUSTOMER" />
+				</bean>
+				<bean class="security.Authority">
+					<property name="authority" value="TRAINER" />
+				</bean>
+				<bean class="security.Authority">
+					<property name="authority" value="MANAGER" />
+				</bean>
+			</list>
+		</property>
+	</bean>
+	
+	<bean id="userAccount4" class="security.UserAccount">
+		<property name="username" value="customer2" />
+		<property name="password" value="5ce4d191fd14ac85a1469fb8c29b7a7b" />
+		<property name="authorities">
+			<list>
 				<bean class="security.Authority">
 					<property name="authority" value="CUSTOMER" />
 				</bean>
@@ -57,6 +77,321 @@
 		</property>
 	</bean>
 	
+	<bean id="userAccount5" class="security.UserAccount">
+		<property name="username" value="trainer1" />
+		<property name="password" value="4d9a96c8e1650dc161f1adcf5c5082a0" />
+		<property name="authorities">
+			<list>
+				<bean class="security.Authority">
+					<property name="authority" value="TRAINER" />
+				</bean>
+			</list>
+		</property>
+	</bean>
+	
+	
+	<bean id="userAccount6" class="security.UserAccount">
+		<property name="username" value="trainer2" />
+		<property name="password" value="6662f54a6c5033357408e6839a5c0a05" />
+		<property name="authorities">
+			<list>
+				<bean class="security.Authority">
+					<property name="authority" value="TRAINER" />
+				</bean>
+			</list>
+		</property>
+	</bean>
+	
+		
+	<bean id="userAccount7" class="security.UserAccount">
+		<property name="username" value="manager1" />
+		<property name="password" value="c240642ddef994358c96da82c0361a58" />
+		<property name="authorities">
+			<list>
+				<bean class="security.Authority">
+					<property name="authority" value="MANAGER" />
+				</bean>
+			</list>
+		</property>
+	</bean>
+	
+	<bean id="userAccount8" class="security.UserAccount">
+		<property name="username" value="manager2" />
+		<property name="password" value="8df5127cd164b5bc2d2b78410a7eea0c" />
+		<property name="authorities">
+			<list>
+				<bean class="security.Authority">
+					<property name="authority" value="MANAGER" />
+				</bean>
+			</list>
+		</property>
+	</bean>
+	
+	
 	<!-- Other domain beans come here -->	
+	
+	
+
+	
+	<bean id="administrator" class="domain.Administrator">
+		<property name="actorName" value="Pablo" />
+		<property name="surname" value="Pablito" />
+		<property name="email" value="pablo@hotmail.com" />
+		<property name="phone" value="+5 (10) 9132" />
+		<property name="postalAddress" value="41001" />
+		<property name="city" value="Sevilla" />
+		<property name="country" value="España" />
+		<property name="userAccount" ref="userAccount1" />
+		<property name="annotationWriter">
+			<list></list>
+		</property>
+		<property name="annotationStore">
+			<list></list>
+		</property>
+	</bean>	
+	
+	<bean id="manager1" class="domain.Manager">
+		<property name="actorName" value="Brook" />
+		<property name="surname" value="Lopez" />
+		<property name="email" value="Brook@hotmail.com" />
+		<property name="phone" value="+5 (10) 9151" />
+		<property name="postalAddress" value="41001" />
+		<property name="city" value="Sevilla" />
+		<property name="country" value="España" />
+		<property name="userAccount" ref="userAccount7" />
+		<property name="annotationWriter">
+			<list></list>
+		</property>
+		<property name="annotationStore">
+			<list></list>
+		</property>
+		<property name="gyms">
+			<list>
+			</list>
+		</property>
+	</bean>
+	
+	<bean id="manager2" class="domain.Manager">
+		<property name="actorName" value="Misty" />
+		<property name="surname" value="Lopez" />
+		<property name="email" value="Misty@hotmail.com" />
+		<property name="phone" value="+5 (10) 9152" />
+		<property name="postalAddress" value="41001" />
+		<property name="city" value="Sevilla" />
+		<property name="country" value="España" />
+		<property name="userAccount" ref="userAccount8" />
+		<property name="annotationWriter">
+			<list></list>
+		</property>
+		<property name="annotationStore">
+			<list></list>
+		</property>
+		<property name="gyms">
+			<list>
+			</list>
+		</property>
+	</bean>
+	
+	
+	
+	<bean id="gym1" class ="domain.Gym">
+		<property name="logo" value="https://i.ytimg.com/vi/iWm0beJM6Bk/maxresdefault.jpg" />
+		<property name="name" value="gym rock" />
+		<property name="address" value="pueblo paleta" />
+		<property name="fee" value="22.33€" />
+		<property name="trainers">
+			<list>
+				<ref bean="trainer1"/>
+			</list>
+		</property>
+		<property name="customers">
+			<list>
+				<ref bean="customer1"/>
+			</list>
+		</property>
+		<property name="activities">
+			<list></list>
+		</property>
+		<property name="annotations">
+			<list></list>
+		</property>
+	</bean>
+	
+	<bean id="gym2" class ="domain.Gym">
+		<property name="logo" value="https://i.ytimg.com/vi/iWm0beJM6Bk/maxresdefault.jpg" />
+		<property name="name" value="gym water" />
+		<property name="address" value="pueblo paleta" />
+		<property name="fee" value="22.33€" />
+		<property name="trainers">
+			<list>
+			<ref bean="trainer2"/>
+			</list>
+		</property>
+		<property name="customers">
+			<list>
+				<ref bean="customer2"/>
+			</list>
+		</property>
+		<property name="activities">
+			<list></list>
+		</property>
+		<property name="annotations">
+			<list></list>
+		</property>
+	</bean>
+	
+	<bean id="customer1" class="domain.Customer">
+		<property name="actorName" value="Laura" />
+		<property name="surname" value="Padial" />
+		<property name="email" value="laura@hotmail.com" />
+		<property name="phone" value="+5 (10) 6643" />
+		<property name="postalAddress" value="41001" />
+		<property name="city" value="Sevilla" />
+		<property name="country" value="España" />
+		<property name="userAccount" ref="userAccount2" />
+		<property name="annotationWriter">
+			<list></list>
+		</property>
+		<property name="annotationStore">
+			<list></list>
+		</property>
+		<property name="gym" ref ="gym1"/>
+		<property name="activities">
+			<list></list>
+		</property>
+	</bean>
+	
+	<bean id="customer2" class="domain.Customer">
+		<property name="actorName" value="Misty" />
+		<property name="surname" value="Lopez" />
+		<property name="email" value="Misty@hotmail.com" />
+		<property name="phone" value="+5 (10) 9152" />
+		<property name="postalAddress" value="41001" />
+		<property name="city" value="Sevilla" />
+		<property name="country" value="España" />
+		<property name="userAccount" ref="userAccount4" />
+		<property name="annotationWriter">
+			<list></list>
+		</property>
+		<property name="annotationStore">
+			<list></list>
+		</property>
+		<property name="gym" ref ="gym2"/>
+		<property name="activities">
+			<list></list>
+		</property>
+	</bean>
+	
+	<bean id="trainer1" class="domain.Trainer">
+		<property name="actorName" value="Brook" />
+		<property name="surname" value="Lopez" />
+		<property name="email" value="Brook@hotmail.com" />
+		<property name="phone" value="+5 (10) 9142" />
+		<property name="postalAddress" value="41001" />
+		<property name="city" value="Sevilla" />
+		<property name="country" value="España" />
+		<property name="userAccount" ref="userAccount5" />
+		<property name="annotationWriter">
+			<list></list>
+		</property>
+		<property name="annotationStore">
+			<list></list>
+		</property>
+		<property name="gym" ref="gym1"/>
+	</bean>
+	
+	<bean id="trainer2" class="domain.Trainer">
+		<property name="actorName" value="Misty" />
+		<property name="surname" value="Lopez" />
+		<property name="email" value="Misty@hotmail.com" />
+		<property name="phone" value="+5 (10) 9152" />
+		<property name="postalAddress" value="41001" />
+		<property name="city" value="Sevilla" />
+		<property name="country" value="España" />
+		<property name="userAccount" ref="userAccount6" />
+		<property name="annotationWriter">
+			<list></list>
+		</property>
+		<property name="annotationStore">
+			<list></list>
+		</property>
+		<property name="gym" ref="gym2"/>
+	</bean>
+	
+	<bean id="activity1" class ="domain.Activity">
+		<property name="title" value="Spinning" />
+		<property name="description" value="A very funny class" />
+		<property name="dayWeek" value="1" />
+		<property name="startTime" value="01/01/2000 09:00:00" />
+		<property name="endTime" value="01/01/2000 10:00:00" />
+		<property name="numSeats" value="22" />
+		<property name="gym" ref="gym1" />
+		<property name="pictures">
+			<list value-type="java.lang.String">
+				<value></value>
+			</list>
+		</property>
+		<property name="customers">
+			<list>
+				<ref bean="customer1"/>
+			</list>
+		</property>
+		<property name="annotations">
+			<list></list>
+		</property>
+		<property name="trainers">
+			<list>
+				<ref bean="trainer1"/>
+			</list>
+		</property>
+	</bean>
+	
+	<bean id="activity2" class ="domain.Activity">
+		<property name="title" value="Tabata" />
+		<property name="description" value="A very funny class" />
+		<property name="dayWeek" value="2" />
+		<property name="startTime" value="01/01/2000 10:00:00" />
+		<property name="endTime" value="01/01/2000 11:00:00" />
+		<property name="numSeats" value="33" />
+		<property name="gym" ref="gym2" />
+		<property name="pictures">
+			<list value-type="java.lang.String">
+				<value></value>
+			</list>
+		</property>
+		<property name="customers">
+			<list>
+				<ref bean="customer2"/>
+			</list>
+		</property>
+		<property name="annotations">
+			<list></list>
+		</property>
+		<property name="trainers">
+			<list>
+				<ref bean="trainer2"/>
+			</list>
+		</property>
+	</bean>
+	
+	<bean id="annotation1" class ="domain.Annotation">
+		<property name="momentWritten" value="20/07/2017 20:20:20" />
+		<property name="text" value="A very funny class cool =D" />
+		<property name="rate" value="3" />
+		<property name="actorWrites" ref="customer1" />
+		<property name="actorStores" ref="trainer1" />
+		<property name="activity" ref="activity1" />
+		<property name="gym" ref="gym1" />
+	</bean>
+	
+	<bean id="annotation2" class ="domain.Annotation">
+		<property name="momentWritten" value="30/07/2017 20:20:20" />
+		<property name="text" value="A super class with the best people" />
+		<property name="rate" value="3" />
+		<property name="actorWrites" ref="customer2" />
+		<property name="actorStores" ref="trainer2" />
+		<property name="activity" ref="activity2" />
+		<property name="gym" ref="gym2" />
+	</bean>
 	
 </beans>
