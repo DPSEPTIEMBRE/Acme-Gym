@@ -198,7 +198,7 @@
 		<property name="logo" value="https://i.ytimg.com/vi/iWm0beJM6Bk/maxresdefault.jpg" />
 		<property name="name" value="gym rock" />
 		<property name="address" value="pueblo paleta" />
-		<property name="fee" value="22.33€" />
+		<property name="fee" value="22.33" />
 		<property name="trainers">
 			<list>
 				<ref bean="trainer1"/>
@@ -221,7 +221,7 @@
 		<property name="logo" value="https://i.ytimg.com/vi/iWm0beJM6Bk/maxresdefault.jpg" />
 		<property name="name" value="gym water" />
 		<property name="address" value="pueblo paleta" />
-		<property name="fee" value="22.33€" />
+		<property name="fee" value="22.33" />
 		<property name="trainers">
 			<list>
 			<ref bean="trainer2"/>
@@ -297,7 +297,6 @@
 		<property name="annotationStore">
 			<list></list>
 		</property>
-		<property name="gym" ref="gym1"/>
 	</bean>
 	
 	<bean id="trainer2" class="domain.Trainer">
@@ -315,7 +314,6 @@
 		<property name="annotationStore">
 			<list></list>
 		</property>
-		<property name="gym" ref="gym2"/>
 	</bean>
 	
 	<bean id="activity1" class ="domain.Activity">
@@ -392,6 +390,14 @@
 		<property name="actorStores" ref="trainer2" />
 		<property name="activity" ref="activity2" />
 		<property name="gym" ref="gym2" />
+	</bean>
+	
+	<bean id="tabu1" class ="domain.TabuWord">
+		<property name="name" value="sex" />
+	</bean>
+	
+	<bean id="tabu2" class ="domain.TabuWord">
+		<property name="name" value="viagra" />
 	</bean>
 	
 </beans>

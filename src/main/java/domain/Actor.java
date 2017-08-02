@@ -22,6 +22,8 @@ import security.UserAccount;
 @Access(AccessType.PROPERTY)
 public class Actor extends DomainEntity {
 
+	//Atributtes
+	
 	private String				actorName;
 	private String				surname;
 	private String				email;

@@ -13,6 +13,8 @@ import javax.validation.constraints.NotNull;
 @Access(AccessType.PROPERTY)
 public class Manager extends Actor {
 
+	//Atributtes
+	
 	private List<Gym> gyms;
 
 

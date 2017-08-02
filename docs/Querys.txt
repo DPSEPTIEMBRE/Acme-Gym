@@ -1,0 +1,29 @@
+NIVEL C:
+
+-Navegar hacia las actividades que organizan(gimnasios) XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+-Los entrenadores que las ofrecen (actividades) XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+-Navegar hacia los gimnasios que las ofrecen (actividades) XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+-Gestionar sus gimnasios, lo cual incluye listarlos (manager)  XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+-Mostrar una dashboard con la siguiente información:
+	a. El mínimo, máximo, media y desviación estándar del número de
+	gimnasios por mánager. XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX F
+	b. El mínimo, máximo, media y desviación estándar del número de
+	gimnasios por cliente. XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX F
+	c. El mínimo, máximo, media y desviación estándar del número de
+	clientes por gimnasio. XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX F
+	d. El gimnasio que ofrece más actividades. La cuenta debe ignorar
+	actividades canceladas. XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+	e. Los clientes que se han apuntado a más actividades. XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+
+NIVEL B:
+
+-Mostrar las notas asociadas con entidades que él/ella puede listar (gimnasios y actividades, los no autenticados) XXXXXXXXXXXXXXXXXXXXXXXXXXX
+-Mostrar un dashboard con la siguiente información:
+	a. La media y desviación estándar del número de notas por entidad
+	apropiada. XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX F
+	b. La media y desviación estándar del número de estrellas por entidad
+	apropiada. XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX F
+	c. La media de estrellas por actor, agrupadas por país. XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+	d. La media de estrellas por actor, agrupadas por ciudad. XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+
+NIVEL A:

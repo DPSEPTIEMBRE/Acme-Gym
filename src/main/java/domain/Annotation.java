@@ -19,6 +19,8 @@ import org.springframework.format.annotation.DateTimeFormat;
 @Access(AccessType.PROPERTY)
 public class Annotation extends DomainEntity {
 
+	//Atributtes
+	
 	private Date		momentWritten;
 	private String		text;
 	private Integer		rate;
@@ -55,19 +57,19 @@ public class Annotation extends DomainEntity {
 	}
 
 	@NotNull
-	@ManyToOne(optional = false)
+	@ManyToOne(optional = true)
 	public Actor getActorStores() {
 		return actorStores;
 	}
 
 	@NotNull
-	@ManyToOne(optional = false)
+	@ManyToOne(optional = true)
 	public Activity getActivity() {
 		return activity;
 	}
 
 	@NotNull
-	@ManyToOne(optional = false)
+	@ManyToOne(optional = true)
 	public Gym getGym() {
 		return gym;
 	}

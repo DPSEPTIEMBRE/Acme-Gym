@@ -24,6 +24,8 @@ import org.springframework.format.annotation.DateTimeFormat;
 @Access(AccessType.PROPERTY)
 public class Activity extends DomainEntity {
 
+	//Atributtes
+	
 	private String				title;
 	private List<String>		pictures;
 	private String				description;
@@ -38,6 +40,7 @@ public class Activity extends DomainEntity {
 
 
 	//Getters
+	
 	@NotBlank
 	public String getTitle() {
 		return title;
@@ -60,14 +63,14 @@ public class Activity extends DomainEntity {
 	}
 
 	@NotNull
-	@Temporal(TemporalType.TIMESTAMP)
+	@Temporal(TemporalType.TIME)
 	@DateTimeFormat(pattern = "hh:mm")
 	public Date getStartTime() {
 		return startTime;
 	}
 
 	@NotNull
-	@Temporal(TemporalType.TIMESTAMP)
+	@Temporal(TemporalType.TIME)
 	@DateTimeFormat(pattern = "hh:mm")
 	public Date getEndTime() {
 		return endTime;

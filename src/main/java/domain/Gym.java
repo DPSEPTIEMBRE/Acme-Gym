@@ -10,15 +10,18 @@ import javax.persistence.OneToMany;
 import javax.validation.constraints.NotNull;
 
 import org.hibernate.validator.constraints.NotBlank;
+import org.hibernate.validator.constraints.URL;
 
 @Entity
 @Access(AccessType.PROPERTY)
 public class Gym extends DomainEntity {
 
+	//Atributtes
+	
 	private String				logo;
 	private String				name;
 	private String				address;
-	private String				fee;
+	private Double				fee;
 	private List<Trainer>		trainers;
 	private List<Customer>		customers;
 	private List<Activity>		activities;
@@ -26,8 +29,9 @@ public class Gym extends DomainEntity {
 
 
 	//Getters
-	@NotNull
+	
 	@NotBlank
+	@URL
 	public String getLogo() {
 		return logo;
 	}
@@ -43,12 +47,12 @@ public class Gym extends DomainEntity {
 	}
 
 	@NotNull
-	public String getFee() {
+	public Double getFee() {
 		return fee;
 	}
 
 	@NotNull
-	@OneToMany(mappedBy = "gym")
+	@OneToMany
 	public List<Trainer> getTrainers() {
 		return trainers;
 	}
@@ -84,7 +88,7 @@ public class Gym extends DomainEntity {
 		this.address = address;
 	}
 
-	public void setFee(String fee) {
+	public void setFee(Double fee) {
 		this.fee = fee;
 	}
 

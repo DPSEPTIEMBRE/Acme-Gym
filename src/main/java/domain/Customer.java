@@ -14,6 +14,8 @@ import javax.validation.constraints.NotNull;
 @Access(AccessType.PROPERTY)
 public class Customer extends Actor {
 
+	//Atributtes
+	
 	private List<Activity>	activities;
 	private Gym				gym;
 
@@ -25,7 +27,7 @@ public class Customer extends Actor {
 		return activities;
 	}
 	@NotNull
-	@ManyToOne(optional = false)
+	@ManyToOne(optional = true)
 	public Gym getGym() {
 		return gym;
 	}
