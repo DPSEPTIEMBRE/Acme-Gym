@@ -1,0 +1,101 @@
+4. Un actor no autenticado debe ser capaz de:
+	1. Registrarse en el sistema como manager o cliente.
+	2. Explorar el catálogo de gimnasios y navegar hacia las actividades que
+	organizan y los entrenadores que las ofrecen.
+	3. Explorar el catálogo de actividades y navegar hacia los gimnasios que las
+	ofrecen o los entrenadores que las desarrollan.
+	4. Buscar actividades que contengan una palabra clave en su título o descripción
+	y estén organizadas en un cierto día a una cierta hora.
+
+5. Un actor autenticado debe ser capaz de:
+	1. Hacer lo mismo que un actor no autenticado, excepto registrarse.
+	2. Editar datos personales.
+
+6. Un actor autenticado como manager debe ser capaz de:
+	1. Gestionar sus gimnasios, lo cual incluye registrarlos, listarlos, editar sus datos
+	o borrarlos. Borrar un gimnasio significa que sus actividades se cancelan
+	automáticamente, que no puede ofrecer más actividades, y que no aparece
+	en las listas, pero los datos no se eliminan del sistema. Un manager tiene que
+	confirmar el borrado dos veces para que el sistema proceda.
+	2. Gestionar las actividades de sus gimnasios, lo cual incluye registrarlas,
+	listarlas y cancelarlas. Note que las actividades no se pueden editar o borrar.
+	3. Listar los entrenadores que se registran en el sistema y buscarlos usando una
+	palabra clave que debe estar contenida en sus nombres o apellidos.
+	4. Registrar un entrenador nuevo en el sistema.
+	5. Asociar un entrenador con uno de sus gimnasios.
+	6. Asociar un entrenador que trabaja para uno de sus gimnasios con una
+	actividad que se organiza en ese gimnasio. Note que una actividad puede
+	requerir varios entrenadores para desarrollarse.
+
+7. Un actor autenticado como cliente debe ser capaz de:
+	1. Unirse o dejar un gimnasio.
+	2. Unirse o dejar una actividad en uno de los gimnasios en los que está
+	apuntado. Unirse a una actividad se permite siempre y cuando haya plazas
+	disponibles.
+
+8. Un actor autenticado como administrador debe ser capaz de:
+	1. Expulsar o readmitir a un manager. Expulsarlo significa que su cuenta está
+	desactivada, lo cual le impide loguearse en el sistema.
+	2. Mostrar una dashboard con la siguiente información:
+		a. El mínimo, máximo, media y desviación estándar del número de
+		gimnasios por mánager.
+		b. El mínimo, máximo, media y desviación estándar del número de
+		gimnasios por cliente.
+		c. El mínimo, máximo, media y desviación estándar del número de
+		clientes por gimnasio.
+		d. El gimnasio que ofrece más actividades. La cuenta debe ignorar
+		actividades canceladas.
+		e. Los clientes que se han apuntado a más actividades.
+
+9. El sistema debe estar disponible en inglés y español. (Los datos en sí mismos no deben
+estar en varios lenguajes, sólo los mensajes que el sistema muestra.)
+
+10. El sistema se ejecutará en España, así que debe cumplir con las regulaciones
+españolas excepto las siguientes: a) el requisito en la LOPD sobre mantener comunicaciones
+seguras y confidenciales (a menos que opten al A+, en cuyo caso se pide usar HTTPS donde
+sea apropiado); b) el requisito en LSSI con respecto a informar a la Cámara de Comercio
+sobre su dominio de internet.
+
+11. El sistema debe ser lo más eficiente y difícil de hackear como sea posible.
+
+12. Los números de teléfono deben adherirse al siguiente patrón: “+CC (AC) PN”, donde
+CC es un código nacional de dos cifras, (AC) es un código de área opcional que consiste de
+hasta tres cifras, y PN es un número de teléfono que consiste de al menos 4 cifras. Cuando
+un número de teléfono no concuerda con este patrón, el sistema debe pedir confirmación;
+si el usuario confirma el número, entonces se debe almacenar.
+
+13. No se requiere que las fotos se guarden en el sistema, pero deben estar disponibles
+en internet; es decir, se pueden añadir como URLs a sitios como Flickr o Pinterest.
+
+15. Un actor no autenticado debe ser capaz de:
+	1. Mostrar las notas asociadas con entidades que él/ella puede listar.
+
+16. Un actor autenticado debe ser capaz de:
+	1. Escribir una anotación y asociarla a una entidad apropiada.
+
+17. Un actor autenticado como administrador debe ser capaz de:
+	1. Borrar notas que crea inapropiadas.
+	2. Mostrar un dashboard con la siguiente información:
+		a. La media y desviación estándar del número de notas por entidad
+		apropiada.
+		b. La media y desviación estándar del número de estrellas por entidad
+		apropiada.
+		c. La media de estrellas por actor, agrupadas por país.
+		d. La media de estrellas por actor, agrupadas por ciudad.
+
+18. Cada vez que se muestra una entidad sobre la que se pueden escribir notas, el
+sistema debe mostrar la media de estrellas que ha recibido. No se requiere de forma
+explícita que este número sea correcto todo el tiempo.
+
+20. El sistema debe enmascarar un número de palabras tabú usando asteriscos. La lista
+de palabras tabú debe ser configurable por el administrador. Por ejemplo, si registra “sex” o
+“viagra” como tabú y alguien escribe una nota tal como “Enjoy a new sex life with Viagra”,
+entonces el sistema debe mostrar “Enjoy a new *** life with ******”. Note que el sistema
+debe guardar el texto original; únicamente cuando se muestra es cuando se enmascara.
+
+27. Las comunicaciones se deben asegurar usando HTTPS donde sea apropiado. Se
+requiere un informe corto sobre cómo se ha implementado esta A+.
+
+28. Al menos un formulario de búsqueda se debe implementar usando AJAX. Se
+recomienda encarecidamente que se use jQuery, pero otras componentes son bienvenidas.
+Se requiere un informe corto sobre cómo se ha implementado esta A+.

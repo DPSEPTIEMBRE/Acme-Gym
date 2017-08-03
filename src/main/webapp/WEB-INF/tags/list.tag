@@ -35,16 +35,14 @@
 		pagesize = 10; }
 %>
 
-<h1>${messageSource}</h1>
-
 <%
 	if(list.isEmpty()) {
 %>
-	<display:table  name="${list}" id="row" requestURI="${requestURI}" pagesize="${pagesize}" class="table table-hover"></display:table>
+	<display:table  name="${list}" id="row" requestURI="${requestURI}" pagesize="${pagesize}" class="table table-over"></display:table>
 <%
 	} else {
 %>
-	<display:table style="border:none;" name="${list}" id="row" requestURI="${requestURI}" pagesize="${pagesize}" class="table table-hover">
+	<display:table style="border:none;" name="${list}" id="row" requestURI="${requestURI}" pagesize="${pagesize}" class="table table-over">
 <%
 		DomainEntity entity = (DomainEntity) row;
 		List<String> hidden = new LinkedList<String>();
@@ -85,8 +83,7 @@
 			
 			//entity.getClass().getSimpleName().toLowerCase() +  "." + e.getName()
 %>
-			
-			<spring:message code='<%=map.containsKey(e.getName()) ? String.format("%s.%s", row.getClass().getSimpleName().toLowerCase(), e.getName()) : "acme.colum"%>' var="title" />
+			<spring:message code='<%=map.containsKey(e.getName()) || !(e.get(row) instanceof DomainEntity) ? String.format("%s.%s", row.getClass().getSimpleName().toLowerCase(), e.getName()) : "acme.colum"%>' var="title" />
 			<display:column title="${title}" sortable ="false">
 <%
 				Object obj = e.get(row);
@@ -163,4 +160,3 @@
 <%
 	}
 %>
-

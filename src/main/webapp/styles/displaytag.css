@@ -164,12 +164,12 @@ span.pagelinks {
 }
  */
  
- .table-hover tbody tr:hover td, .table-hover tbody tr:hover th {
+.table-hover tbody tr:hover td, .table-hover tbody tr:hover th {
   background-color: #c7c7e0;
 }
 
 .table-hover thead{
-	background-color: #9696cc;
+  background-color: #9696cc;
 }
 
 span.pagelinks {
