@@ -56,19 +56,19 @@ public class Annotation extends DomainEntity {
 		return actorWrites;
 	}
 
-	@NotNull
+	
 	@ManyToOne(optional = true)
 	public Actor getActorStores() {
 		return actorStores;
 	}
 
-	@NotNull
+	
 	@ManyToOne(optional = true)
 	public Activity getActivity() {
 		return activity;
 	}
 
-	@NotNull
+	
 	@ManyToOne(optional = true)
 	public Gym getGym() {
 		return gym;

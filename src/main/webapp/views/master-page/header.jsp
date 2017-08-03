@@ -28,6 +28,7 @@
 					<security:authorize access="isAnonymous()">
 						<li><a class="fNiv" href="security/login.do"><spring:message code="master.page.login" /></a></li>
 						<li><a class="fNiv" href="gym/list.do"><spring:message code="master.page.gym.list" /></a></li>
+						<li><a class="fNiv" href="activity/list.do"><spring:message code="master.page.activities.list" /></a></li>
 					</security:authorize>
 					
 					<security:authorize access="isAuthenticated()">

@@ -210,7 +210,9 @@
 			</list>
 		</property>
 		<property name="activities">
-			<list></list>
+			<list>
+				<ref bean="activity1"/>
+			</list>
 		</property>
 		<property name="annotations">
 			<list></list>
@@ -233,10 +235,14 @@
 			</list>
 		</property>
 		<property name="activities">
-			<list></list>
+			<list>
+				<ref bean="activity2"/>
+			</list>
 		</property>
 		<property name="annotations">
-			<list></list>
+			<list>
+				<ref bean="annotation2"/>
+			</list>
 		</property>
 	</bean>
 	
@@ -250,7 +256,9 @@
 		<property name="country" value="España" />
 		<property name="userAccount" ref="userAccount2" />
 		<property name="annotationWriter">
-			<list></list>
+			<list>
+				<ref bean="annotation1"/>
+			</list>
 		</property>
 		<property name="annotationStore">
 			<list></list>
@@ -271,10 +279,14 @@
 		<property name="country" value="España" />
 		<property name="userAccount" ref="userAccount4" />
 		<property name="annotationWriter">
-			<list></list>
+			<list>
+				<ref bean="annotation2"/>
+			</list>
 		</property>
 		<property name="annotationStore">
-			<list></list>
+			<list>
+				<ref bean="annotation1"/>
+			</list>
 		</property>
 		<property name="gym" ref ="gym2"/>
 		<property name="activities">
@@ -377,9 +389,7 @@
 		<property name="text" value="A very funny class cool =D" />
 		<property name="rate" value="3" />
 		<property name="actorWrites" ref="customer1" />
-		<property name="actorStores" ref="trainer1" />
-		<property name="activity" ref="activity1" />
-		<property name="gym" ref="gym1" />
+		<property name="actorStores" ref="customer2" />
 	</bean>
 	
 	<bean id="annotation2" class ="domain.Annotation">
@@ -387,8 +397,6 @@
 		<property name="text" value="A super class with the best people" />
 		<property name="rate" value="3" />
 		<property name="actorWrites" ref="customer2" />
-		<property name="actorStores" ref="trainer2" />
-		<property name="activity" ref="activity2" />
 		<property name="gym" ref="gym2" />
 	</bean>
 	

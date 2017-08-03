@@ -7,34 +7,34 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
-import domain.Gym;
-import services.GymService;
+import domain.Activity;
+import services.ActivityService;
 
 @Controller
-@RequestMapping("/gym")
-public class GymController extends AbstractController{
+@RequestMapping("/activity")
+public class ActivityController extends AbstractController{
 
 	//Services
-	
+
 	@Autowired
-	private GymService gymService;
-	
+	private ActivityService activityService;
+
 	// Constructors -----------------------------------------------------------
 
-	public GymController() {
+	public ActivityController() {
 		super();
 	}
-	
+
 	//Actions
-	
+
 	@RequestMapping("/list")
 	public ModelAndView list() {
 		ModelAndView result;
 
-		List<Gym> gyms= gymService.findAll();
-		
-		result = new ModelAndView("gym/list");
-		result.addObject("gyms", gyms);
+		List<Activity> activities= activityService.findAll();
+
+		result = new ModelAndView("activity/list");
+		result.addObject("activities", activities);
 
 		return result;
 	}

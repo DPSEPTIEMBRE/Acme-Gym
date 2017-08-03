@@ -52,6 +52,7 @@
 				s = s.trim(); } }
 		
 		Map<String, String> map = new HashMap<String, String>();
+
 		if(entityUrl != null && !entityUrl.trim().isEmpty()) {
 			StringBuilder repaired = new StringBuilder(entityUrl);
 			repaired.deleteCharAt(0);
