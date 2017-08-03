@@ -17,7 +17,7 @@
 <%@taglib prefix="acme" tagdir="/WEB-INF/tags"%>
 
 <div>
-	<img src="images/logo.png" alt="Acme-LookSee Co., Inc." />
+	<img src="images/logo.png" alt="Acme-Gym Co., Inc." />
 </div>
 
 <div style="width: 30%">
@@ -27,6 +27,12 @@
 				<ul class="nav navbar-nav">
 					<security:authorize access="isAnonymous()">
 						<li><a class="fNiv" href="security/login.do"><spring:message code="master.page.login" /></a></li>
+						<li><a class="fNiv" href="gym/list.do"><spring:message code="master.page.gym.list" /></a></li>
+						<li><a class="fNiv" href="activity/list.do"><spring:message code="master.page.activities.list" /></a></li>
+					</security:authorize>
+					
+					<security:authorize access="hasRole('ADMINISTRATOR')">
+						<li><a class="fNiv" href="administrator/dashboard.do"><spring:message code="master.page.dashboard" /></a></li>
 						<li><a class="fNiv" href="gym/list.do"><spring:message code="master.page.gym.list" /></a></li>
 						<li><a class="fNiv" href="activity/list.do"><spring:message code="master.page.activities.list" /></a></li>
 					</security:authorize>
