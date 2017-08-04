@@ -53,6 +53,10 @@ public class TrainerService {
 		return trainerRepository.save(arg0);
 	}
 	
+	public boolean exists(Integer arg0) {
+		return trainerRepository.exists(arg0);
+	}
+	
 	//Others Methods
 	
 

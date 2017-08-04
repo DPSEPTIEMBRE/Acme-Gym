@@ -29,7 +29,12 @@
 						<li><a class="fNiv" href="security/login.do"><spring:message code="master.page.login" /></a></li>
 						<li><a class="fNiv" href="gym/list.do"><spring:message code="master.page.gym.list" /></a></li>
 						<li><a class="fNiv" href="activity/list.do"><spring:message code="master.page.activities.list" /></a></li>
+						<li><a class="fNiv" href="customer/actor/create.do"><spring:message code="master.page.customer.create" /></a></li>
+						<li><a class="fNiv" href="customer/list.do"><spring:message code="master.page.customer.list" /></a></li>
+						<li><a class="fNiv" href="customer/actor/edit.do"><spring:message code="master.page.customer.edit" /></a></li>
 					</security:authorize>
+					
+					
 					
 					<security:authorize access="hasRole('ADMINISTRATOR')">
 						<li><a class="fNiv" href="administrator/dashboard.do"><spring:message code="master.page.dashboard" /></a></li>

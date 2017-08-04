@@ -52,6 +52,10 @@ public class AdministratorService {
 		return administratorRepository.save(arg0);
 	}
 	
+	public boolean exists(Integer arg0) {
+		return administratorRepository.exists(arg0);
+	}
+	
 	//Others Methods
 	
 	public Object[] avgDesviationNotesWrittersByAdministrators() {

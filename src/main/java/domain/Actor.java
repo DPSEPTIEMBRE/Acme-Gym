@@ -58,7 +58,6 @@ public class Actor extends DomainEntity {
 		return phone;
 	}
 
-	@NotNull
 	public String getPostalAddress() {
 		return postalAddress;
 	}
@@ -70,18 +69,16 @@ public class Actor extends DomainEntity {
 		return userAccount;
 	}
 
-	@NotNull
 	public String getCity() {
 		return city;
 	}
 
-	@NotNull
 	public String getCountry() {
 		return country;
 	}
 
-	@OneToMany(mappedBy = "actorWrites")
 	@NotNull
+	@OneToMany(mappedBy = "actorWrites")
 	public List<Annotation> getAnnotationWriter() {
 		return annotationWriter;
 	}

@@ -22,6 +22,18 @@
 			Add your own converters using entries of the following form: 
 			<bean class="converters.Class1ToClass2" /> 
 		-->
+		<bean class="converters.ActorToStringConverter" />
+		<bean class="converters.StringToActorConverter" />
+		<bean class="converters.ActivityToStringConverter" />
+		<bean class="converters.StringToActivityConverter" />
+		<bean class="converters.AnnotationToStringConverter" />
+		<bean class="converters.StringToAnnotationConverter" />
+		<bean class="converters.GymToStringConverter" />
+		<bean class="converters.StringToGymConverter" />
+		<bean class="converters.AuthorityToStringConverter" />
+		<bean class="converters.StringToAuthorityConverter" />
+		<bean class="converters.CustomerToStringConverter" />
+		<bean class="converters.StringToCustomerConverter" />
 	</util:list>
 	
 </beans>

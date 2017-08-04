@@ -54,6 +54,10 @@ public class ManagerService {
 		return managerRepository.save(arg0);
 	}
 	
+	public boolean exists(Integer arg0) {
+		return managerRepository.exists(arg0);
+	}
+	
 
 	//Others Methods
 	

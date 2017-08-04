@@ -16,7 +16,7 @@ public interface CustomerRepository extends JpaRepository<Customer, Integer> {
 	List<Customer> customersWithMoreActivities();
 
 	//El mínimo, máximo, media y desviación estándar del número de gimnasios por cliente
-	@Query("select min(c.gym), max(c.gym), avg(c.gym) from Customer c")
+	@Query("select min(c.gyms.size), max(c.gyms.size), avg(c.gyms.size) from Customer c")
 	Object[] minMaxAvgDesviationGymsByCustomers();
 
 	//La media y desviación estándar del número de notas escritas por cliente
