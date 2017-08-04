@@ -7,7 +7,6 @@ import javax.persistence.Access;
 import javax.persistence.AccessType;
 import javax.persistence.Entity;
 import javax.persistence.ManyToMany;
-import javax.persistence.ManyToOne;
 import javax.validation.constraints.NotNull;
 
 @Entity
@@ -17,7 +16,7 @@ public class Customer extends Actor {
 	//Atributtes
 	
 	private List<Activity>	activities;
-	private Gym				gym;
+	private List<Gym>		gyms;
 
 
 	//Getters
@@ -27,9 +26,9 @@ public class Customer extends Actor {
 		return activities;
 	}
 	@NotNull
-	@ManyToOne(optional = true)
-	public Gym getGym() {
-		return gym;
+	@ManyToMany
+	public List<Gym> getGyms() {
+		return gyms;
 	}
 
 	//Setters
@@ -37,8 +36,8 @@ public class Customer extends Actor {
 		this.activities = activities;
 	}
 
-	public void setGym(Gym gym) {
-		this.gym = gym;
+	public void setGyms(List<Gym> gyms) {
+		this.gyms = gyms;
 	}
 
 }

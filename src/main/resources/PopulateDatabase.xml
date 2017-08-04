@@ -263,7 +263,11 @@
 		<property name="annotationStore">
 			<list></list>
 		</property>
-		<property name="gym" ref ="gym1"/>
+		<property name="gyms">
+			<list>
+				<ref bean="gym1"/>
+			</list>
+		</property>
 		<property name="activities">
 			<list></list>
 		</property>
@@ -288,7 +292,11 @@
 				<ref bean="annotation1"/>
 			</list>
 		</property>
-		<property name="gym" ref ="gym2"/>
+		<property name="gyms">
+			<list>
+				<ref bean="gym2"/>
+			</list>
+		</property>
 		<property name="activities">
 			<list></list>
 		</property>
