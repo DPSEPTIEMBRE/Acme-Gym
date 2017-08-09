@@ -51,7 +51,7 @@ public class CustomerController {
 		} else {
 			try {
 				customerService.save_create(user);
-				result = new ModelAndView("redirect:/customer/list.do");
+				result = new ModelAndView("redirect:/welcome/index.do");
 			} catch (Throwable th) {
 				result = createNewModelAndView(user, "customer.commit.error");
 			}
@@ -76,12 +76,23 @@ public class CustomerController {
 
 		return result;
 	}
+	
+	/*@RequestMapping(value = "/actor/create", method = RequestMethod.GET)
+	public ModelAndView create() {
+		ModelAndView result;
+
+		result = createNewModelAndView(customerService.create(), null);
+
+		return result;
+	}
+*/
 
 	@RequestMapping(value = "/actor/edit", method = RequestMethod.GET)
 	public ModelAndView edit(@RequestParam Customer customer) {
-		ModelAndView result;
-		result = new ModelAndView("customer/edit");
+		ModelAndView result = createEditModelAndView(customer, null);
+		
 		result.addObject(customer);
+		
 		return result;
 	}
 
