@@ -1,7 +1,6 @@
 
 package domain;
 
-import java.util.Date;
 import java.util.List;
 
 import javax.persistence.Access;
@@ -11,14 +10,12 @@ import javax.persistence.Entity;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
 
 import org.hibernate.validator.constraints.NotBlank;
 import org.hibernate.validator.constraints.NotEmpty;
 import org.hibernate.validator.constraints.Range;
-import org.springframework.format.annotation.DateTimeFormat;
 
 @Entity
 @Access(AccessType.PROPERTY)
@@ -30,17 +27,24 @@ public class Activity extends DomainEntity {
 	private List<String>		pictures;
 	private String				description;
 	private Integer				dayWeek;
-	private Date				startTime;
-	private Date				endTime;
+	private String				startTime;
+	private String				endTime;
 	private Integer				numSeats;
 	private List<Customer>		customers;
 	private List<Annotation>	annotations;
 	private Gym					gym;
 	private List<Trainer>		trainers;
+	private Boolean				isCancelled;
+	
 
 
 	//Getters
 	
+	@NotNull
+	public Boolean getIsCancelled() {
+		return isCancelled;
+	}
+
 	@NotBlank
 	public String getTitle() {
 		return title;
@@ -62,17 +66,15 @@ public class Activity extends DomainEntity {
 		return dayWeek;
 	}
 
-	@NotNull
-	@Temporal(TemporalType.TIME)
-	@DateTimeFormat(pattern = "hh:mm")
-	public Date getStartTime() {
+	@NotBlank
+	@Pattern(regexp="^([0-9]|0[0-9]|1[0-9]|2[0-3]):[0-5][0-9]$")
+	public String getStartTime() {
 		return startTime;
 	}
 
-	@NotNull
-	@Temporal(TemporalType.TIME)
-	@DateTimeFormat(pattern = "hh:mm")
-	public Date getEndTime() {
+	@NotBlank
+	@Pattern(regexp="^([0-9]|0[0-9]|1[0-9]|2[0-3]):[0-5][0-9]$")
+	public String getEndTime() {
 		return endTime;
 	}
 
@@ -106,6 +108,11 @@ public class Activity extends DomainEntity {
 	}
 
 	//Setters
+	
+	public void setIsCancelled(Boolean isCancelled) {
+		this.isCancelled = isCancelled;
+	}
+	
 	public void setTitle(String title) {
 		this.title = title;
 	}
@@ -122,11 +129,11 @@ public class Activity extends DomainEntity {
 		this.dayWeek = dayWeek;
 	}
 
-	public void setStartTime(Date startTime) {
+	public void setStartTime(String startTime) {
 		this.startTime = startTime;
 	}
 
-	public void setEndTime(Date endTime) {
+	public void setEndTime(String endTime) {
 		this.endTime = endTime;
 	}
 

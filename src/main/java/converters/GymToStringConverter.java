@@ -1,3 +1,4 @@
+
 package converters;
 
 import org.springframework.core.convert.converter.Converter;
@@ -11,15 +12,14 @@ import domain.Gym;
 public class GymToStringConverter implements Converter<Gym, String> {
 
 	@Override
-	public String convert(Gym gym) {
-		String result;
-
-		if (gym == null)
-			result = null;
-		else
-			result = String.valueOf(gym.getId());
-
-		return result;
+	public String convert(Gym ar) {
+		String res;
+		if (ar == null) {
+			res = null;
+		} else {
+			res = String.valueOf(ar.getId());
+		}
+		return res;
 	}
 
 }

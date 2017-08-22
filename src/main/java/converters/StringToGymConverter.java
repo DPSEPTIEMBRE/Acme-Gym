@@ -1,3 +1,4 @@
+
 package converters;
 
 import org.apache.commons.lang.StringUtils;
@@ -6,18 +7,17 @@ import org.springframework.core.convert.converter.Converter;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
-import repositories.GymRepository;
 import domain.Gym;
-
-
+import repositories.GymRepository;
 
 @Component
 @Transactional
-public class StringToGymConverter  implements Converter<String, Gym> {
-	
+public class StringToGymConverter implements Converter<String, Gym> {
+
 	@Autowired
-	GymRepository gymRepository;
-	
+	GymRepository arRepository;
+
+
 	@Override
 	public Gym convert(String text) {
 		Gym result;
@@ -27,7 +27,7 @@ public class StringToGymConverter  implements Converter<String, Gym> {
 				result = null;
 			} else {
 				id = Integer.valueOf(text);
-				result =gymRepository.findOne(id);
+				result = arRepository.findOne(id);
 			}
 		} catch (Exception oops) {
 			throw new IllegalArgumentException(oops);

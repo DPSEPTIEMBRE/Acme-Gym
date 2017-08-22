@@ -1,3 +1,4 @@
+
 package converters;
 
 import org.springframework.core.convert.converter.Converter;
@@ -11,15 +12,13 @@ import domain.Annotation;
 public class AnnotationToStringConverter implements Converter<Annotation, String> {
 
 	@Override
-	public String convert(Annotation annotation) {
-		String result;
-
-		if (annotation == null)
-			result = null;
-		else
-			result = String.valueOf(annotation.getId());
-
-		return result;
+	public String convert(Annotation ar) {
+		String res;
+		if (ar == null) {
+			res = null;
+		} else {
+			res = String.valueOf(ar.getId());
+		}
+		return res;
 	}
-
 }

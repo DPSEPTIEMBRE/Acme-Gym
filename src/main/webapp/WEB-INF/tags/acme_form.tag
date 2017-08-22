@@ -95,7 +95,7 @@
 <%
 			if(!Boolean.class.isAssignableFrom(e.getType())) {
 %>
-			<label for="email"><spring:message code='<%=entity.getClass().getSimpleName().toLowerCase() + "." + e.getName() %>' /></label>
+			<label for="email"><spring:message code='<%=entity.getClass().getSimpleName().toLowerCase() + "." + e.getName() %>' /></>
 <%
 			}
 %>
@@ -121,7 +121,7 @@
 %>
 				
 				<div class="checkbox">
-				  <label><input type="checkbox" value=""><spring:message code='<%=entity.getClass().getSimpleName().toLowerCase() + "." + e.getName() %>' /></label>
+				  <input type="checkbox" value=""><spring:message code='<%=entity.getClass().getSimpleName().toLowerCase() + "." + e.getName() %>' />
 				</div>
 <%
 			}

@@ -17,4 +17,80 @@
 <%@taglib prefix="display" uri="http://displaytag.sf.net"%>
 <%@taglib prefix="acme" tagdir="/WEB-INF/tags"%>
 
-<acme:list list="${gyms}" requestURI="gym/list.do" hidden_fields="logo,customers,trainers" />
+<security:authorize access="permitAll() and !hasRole('MANAGER') and !hasRole('CUSTOMER') and !hasRole('ADMINISTRATOR')">
+
+<jstl:if test="${a==3}">
+
+<acme:list list="${gyms}" requestURI="gym/list.do" hidden_fields="customers,trainers,id,version,isDelete" 
+entityUrl="{activities: activity/listByGym.do,annotations: annotation/listByGym.do}" />
+
+</jstl:if>
+
+</security:authorize>
+
+<security:authorize access="hasRole('MANAGER')"> 
+
+<jstl:if test="${a==2}">
+
+<acme:list list="${gyms}" requestURI="gym/list.do" hidden_fields="customers,trainers,id,version,isDelete" 
+entityUrl="{activities: activity/listByGym3.do,annotations: annotation/listByGym.do}" editUrl="gym/edit.do" deleteUrl="gym/delete.do"  
+extraColumns="{newActivity: manager/activity/create.do, addTrainer: manager/trainer/addByGym.do, newAnnotation: annotation/create.do}"/>
+
+</jstl:if>
+
+<jstl:if test="${a==1}">
+
+<acme:list list="${gyms}" requestURI="gym/list.do" hidden_fields="customers,trainers,id,version,isDelete" 
+entityUrl="{activities: activity/listByGym3.do,annotations: annotation/listByGym.do}" 
+extraColumns="{newAnnotation: annotation/create.do}"/>
+
+</jstl:if>
+
+<jstl:if test="${a==3}">
+
+<acme:list list="${gyms}" requestURI="gym/list.do" hidden_fields="customers,trainers,id,version,isDelete" 
+entityUrl="{activities: activity/listByGym3.do,annotations: annotation/listByGym.do}" 
+extraColumns="{newAnnotation: annotation/create.do}"/>
+
+</jstl:if>
+
+</security:authorize>
+
+<security:authorize access="hasRole('CUSTOMER')"> 
+
+<jstl:if test="${a==2}">
+
+<acme:list list="${gyms}" requestURI="gym/list.do" hidden_fields="customers,trainers,id,version,isDelete" 
+entityUrl="{activities: activity/listByGym2.do,annotations: annotation/listByGym.do}" 
+extraColumns="{leave: customer/gym/leave.do, newAnnotation: annotation/create.do}"  />
+
+</jstl:if>
+
+<jstl:if test="${a==1}">
+
+<acme:list list="${gyms}" requestURI="gym/list.do" hidden_fields="customers,trainers,id,version,isDelete" 
+entityUrl="{activities: activity/listByGym.do,annotations: annotation/listByGym.do}" 
+extraColumns="{join: customer/gym/join.do, newAnnotation: annotation/create.do}" />
+
+</jstl:if>
+
+<jstl:if test="${a==3}">
+
+<acme:list list="${gyms}" requestURI="gym/list.do" hidden_fields="customers,trainers,id,version,isDelete" 
+entityUrl="{activities: activity/listByGym.do,annotations: annotation/listByGym.do}" 
+extraColumns="{newAnnotation: annotation/create.do}"/>
+
+</jstl:if>
+
+</security:authorize>
+
+<security:authorize access="hasRole('ADMINISTRATOR')">
+
+
+<acme:list list="${gyms}" requestURI="gym/list.do" hidden_fields="customers,trainers,id,version,isDelete" 
+entityUrl="{activities: activity/listByGym.do,annotations: annotation/listByGym.do}" 
+extraColumns="{newAnnotation: annotation/create.do}"/>
+
+
+</security:authorize>
+

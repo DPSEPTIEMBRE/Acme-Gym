@@ -27,6 +27,14 @@ public class TabuWordService {
 
 	//CRUD Methods
 	
+	public TabuWord create() {
+		TabuWord tabu = new TabuWord();
+
+		tabu.setName(new String());
+		
+		return tabu;
+	}
+	
 	public void delete(TabuWord arg0) {
 		Assert.notNull(arg0);
 		tabuWordRepository.delete(arg0);
@@ -47,9 +55,20 @@ public class TabuWordService {
 		return tabuWordRepository.save(entities);
 	}
 
+	public boolean exists(Integer id) {
+		return tabuWordRepository.exists(id);
+	}
+
 	public TabuWord save(TabuWord arg0) {
 		Assert.notNull(arg0);
-		return tabuWordRepository.save(arg0);
+		TabuWord tabu= new TabuWord();
+		if(exists(arg0.getId())) {
+			tabu=tabuWordRepository.findOne(arg0.getId());
+			tabu.setName(arg0.getName());
+			return tabuWordRepository.save(tabu);
+		}else {
+			return tabuWordRepository.save(arg0);
+		}
 	}
 
 	

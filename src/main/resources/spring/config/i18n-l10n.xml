@@ -26,7 +26,12 @@
 		<value>/views/administrator/messages</value>
 		<value>/views/gym/messages</value>
 		<value>/views/activity/messages</value>
-		<value>/views/customer/messages</value>
+		<value>/views/annotation/messages</value>
+		<value>/views/trainer/messages</value>
+		<value>/views/actor/messages</value>
+		<value>/views/manager/messages</value>
+		<value>/views/legislation/messages</value>
+		<value>/views/tabuWord/messages</value>
 	</util:list>
 
 </beans>

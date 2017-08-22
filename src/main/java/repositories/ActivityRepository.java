@@ -20,9 +20,13 @@ public interface ActivityRepository extends JpaRepository<Activity, Integer> {
 	
 	//Gimnasio que ofrece una actividad
 	@Query("select a.gym from Activity a where a.id=?1")
-	List<Gym> gymByActivity(int activity_id);
+	Gym gymByActivity(int activity_id);
 	
 	//Notas asociadas a actividad
 	@Query("select a.annotations from Activity a where a.id=?1")
 	List<Annotation> annotationsByActivity(int activity_id);
+	
+	//Media estrellas asociadas a actividad
+	@Query("select avg(n.rate) from Activity a join a.annotations n where a.id=?1")
+	Double avgStarsByActivity(int activity_id);
 }

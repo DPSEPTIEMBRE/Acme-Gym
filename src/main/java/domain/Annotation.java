@@ -1,19 +1,15 @@
 
 package domain;
 
-import java.util.Date;
-
 import javax.persistence.Access;
 import javax.persistence.AccessType;
 import javax.persistence.Entity;
 import javax.persistence.ManyToOne;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
 
 import org.hibernate.validator.constraints.NotBlank;
 import org.hibernate.validator.constraints.Range;
-import org.springframework.format.annotation.DateTimeFormat;
 
 @Entity
 @Access(AccessType.PROPERTY)
@@ -21,7 +17,7 @@ public class Annotation extends DomainEntity {
 
 	//Atributtes
 	
-	private Date		momentWritten;
+	private String		momentWritten;
 	private String		text;
 	private Integer		rate;
 	private Actor		actorWrites;
@@ -32,10 +28,9 @@ public class Annotation extends DomainEntity {
 
 	//Getters
 
-	@NotNull
-	@Temporal(TemporalType.TIMESTAMP)
-	@DateTimeFormat(pattern = "dd/MM/yyyy hh:mm:ss")
-	public Date getMomentWritten() {
+	@NotBlank
+	@Pattern(regexp="^([1-9]|([012][0-9])|(3[01]))-([0]{0,1}[1-9]|1[012])-\\d\\d\\d\\d [012]{0,1}[0-9]:[0-6][0-9]$")
+	public String getMomentWritten() {
 		return momentWritten;
 	}
 
@@ -80,7 +75,7 @@ public class Annotation extends DomainEntity {
 		this.activity = activity;
 	}
 
-	public void setMomentWritten(Date momentWritten) {
+	public void setMomentWritten(String momentWritten) {
 		this.momentWritten = momentWritten;
 	}
 

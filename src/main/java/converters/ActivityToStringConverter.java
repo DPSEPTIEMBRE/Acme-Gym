@@ -1,3 +1,4 @@
+
 package converters;
 
 import org.springframework.core.convert.converter.Converter;
@@ -11,15 +12,13 @@ import domain.Activity;
 public class ActivityToStringConverter implements Converter<Activity, String> {
 
 	@Override
-	public String convert(Activity activity) {
-		String result;
-
-		if (activity == null)
-			result = null;
-		else
-			result = String.valueOf(activity.getId());
-
-		return result;
+	public String convert(Activity ar) {
+		String res;
+		if (ar == null) {
+			res = null;
+		} else {
+			res = String.valueOf(ar.getId());
+		}
+		return res;
 	}
-
 }

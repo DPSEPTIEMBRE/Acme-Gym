@@ -3,6 +3,7 @@
 	version: 1.0
  -->
 
+<%@tag import="org.apache.commons.lang.ArrayUtils"%>
 <%@tag import="org.springframework.context.ApplicationContext"%>
 <%@tag import="org.springframework.beans.factory.annotation.Autowired"%>
 <%@tag import="org.springframework.context.MessageSource"%>
@@ -16,8 +17,9 @@
 <%@tag import="java.util.List"%>
 <%@tag import="java.lang.reflect.Field"%>
 <%@tag import="domain.DomainEntity"%>
+
 <%@taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
-<%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
+<%@taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 <%@tag language="java" body-content="empty" %>
 <%@taglib prefix="display" uri="http://displaytag.sf.net"%>
 
@@ -29,6 +31,7 @@
 <%@ attribute name="editUrl" required="false" rtexprvalue="true" type="java.lang.String" %>
 <%@ attribute name="deleteUrl" required="false" rtexprvalue="true" type="java.lang.String" %>
 <%@ attribute name="columNames" required="false" rtexprvalue="true" type="java.lang.String" %>
+<%@ attribute name="extraColumns" required="false" rtexprvalue="true" type="java.lang.String" %>
 
 <%
 	if(pagesize == null) {
@@ -50,7 +53,6 @@
 			hidden.addAll(Arrays.asList(hidden_fields.split(",")));
 			for(String s : hidden) {
 				s = s.trim(); } }
-		
 		Map<String, String> map = new HashMap<String, String>();
 
 		if(entityUrl != null && !entityUrl.trim().isEmpty()) {
@@ -64,7 +66,30 @@
 			}
 		}
 		
-		for(Field e : entity.getClass().getDeclaredFields()) {
+		Map<String, String> mapExtras = new HashMap<String, String>();
+		if(extraColumns != null && !extraColumns.trim().isEmpty()){
+			StringBuilder repaired = new StringBuilder(extraColumns);
+			repaired.deleteCharAt(0);
+			repaired.setLength(repaired.length() -1);
+			
+			for(String u : repaired.toString().split(",")) {
+				String[] arr = u.trim().split(":");
+				mapExtras.put(arr[0], arr[1]);
+			}
+		}
+
+		
+
+		
+		Field[] fieldsN= entity.getClass().getDeclaredFields();
+		Field[] fieldsS= entity.getClass().getSuperclass().getDeclaredFields();
+
+		
+		Field[] fieldsFinal = new Field[fieldsN.length + fieldsS.length];
+		System.arraycopy(fieldsN, 0, fieldsFinal, 0, fieldsN.length);
+		System.arraycopy(fieldsS, 0, fieldsFinal, fieldsN.length, fieldsS.length);
+		
+		for(Field e : fieldsFinal) {
 			e.setAccessible(true);
 			if(hidden.contains(e.getName())) {
 				continue;
@@ -82,7 +107,6 @@
 				}
 			}
 			
-			//entity.getClass().getSimpleName().toLowerCase() +  "." + e.getName()
 %>
 			<spring:message code='<%=map.containsKey(e.getName()) || !(e.get(row) instanceof DomainEntity) ? String.format("%s.%s", row.getClass().getSimpleName().toLowerCase(), e.getName()) : "acme.colum"%>' var="title" />
 			<display:column title="${title}" sortable ="false">
@@ -94,21 +118,18 @@
 %>
 <%
 				if(collection.iterator().next() instanceof DomainEntity) {
-					int ac = 1;
-					for(Object d : collection) {
-						DomainEntity domain = (DomainEntity) d;
 %>
-						<a href="<%=map.containsKey(e.getName()) ? map.get(e.getName()) + "?q=" + domain.getId() : "#"%>">
+						<a href="<%=map.containsKey(e.getName()) ? map.get(e.getName()) + "?q=" + entity.getId() : "#"%>">
 <%
 						if(map.containsKey(e.getName())) {
 %>
-						<spring:message code='<%=row.getClass().getSimpleName().toLowerCase() + "." + e.getName() %>' /> (<%=ac++ %>) <br />
+						<spring:message code='<%=row.getClass().getSimpleName().toLowerCase() + "." + e.getName() %>' /> <br />
 <%
 						}
 %>
 						</a>
 <%
-					}
+					
 				} else {
 					for(Object d : collection) {
 %>
@@ -122,7 +143,7 @@
 <%
 						if(map.containsKey(e.getName()) && obj instanceof DomainEntity) {
 %>
-							<a href="<%=map.get(e.getName()) + "?q=" + ((DomainEntity) obj).getId()%>">
+							<a href="<%=map.get(e.getName()) + "?q=" + entity.getId()%>">
 								<spring:message code='<%=row.getClass().getSimpleName().toLowerCase() + "." + e.getName() %>' />
 							</a>
 <%
@@ -156,7 +177,23 @@
 			</display:column>
 <%
 		}
+		if(!mapExtras.keySet().isEmpty()){
+			for(String s: mapExtras.keySet()){
+				%>	
+				
+				<display:column sortable ="false">
+					<a href="<%=mapExtras.get(s) + "?q=" + entity.getId()%>">
+						<spring:message code='<%=row.getClass().getSimpleName().toLowerCase() + "." + s %>' />
+					</a>
+				</display:column>
+				
+				<% 
+				
+				}
+		}
+		
 %>
+
 	</display:table>
 <%
 	}

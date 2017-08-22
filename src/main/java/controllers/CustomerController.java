@@ -1,124 +1,191 @@
 package controllers;
 
-import javax.validation.Valid;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.validation.BindingResult;
-import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
+import domain.Activity;
 import domain.Customer;
+import domain.Gym;
+import security.LoginService;
+import services.ActivityService;
 import services.CustomerService;
+import services.GymService;
 
 @Controller
 @RequestMapping("/customer")
-public class CustomerController {
+public class CustomerController extends AbstractController{
+
+	//Services
 
 	@Autowired
-	CustomerService customerService;
+	private CustomerService customerService;
 
+	@Autowired
+	private LoginService loginService;
+	
+	@Autowired
+	private GymService gymService;
+	
+	@Autowired
+	private ActivityService activityService;
 
-	//Constructor
+	// Constructors -----------------------------------------------------------
+
 	public CustomerController() {
 		super();
 	}
 
-	//Creation
-	@RequestMapping(value = "/actor/create", method = RequestMethod.GET)
-	public ModelAndView create() {
+	//Actions
+
+	@RequestMapping("/gym/list")
+	public ModelAndView listGyms(@RequestParam Integer q,@RequestParam Integer a) {
 		ModelAndView result;
 
-		result = createNewModelAndView(customerService.create(), null);
+		Customer customer= (Customer)loginService.findActorByUserName(q);
 
-		return result;
-	}
-
-	@RequestMapping(value = "/actor/save", method = RequestMethod.POST, params="save")
-	public ModelAndView saveCreate(@Valid Customer user, BindingResult binding) {
-		ModelAndView result;
-
-		for(FieldError e : binding.getFieldErrors()) {
-			System.err.println(e.getField());
-			System.err.println(e.getDefaultMessage());
-		}
-
-		if (binding.hasErrors()) {
-			result = createNewModelAndView(user, null);
-		} else {
-			try {
-				customerService.save_create(user);
-				result = new ModelAndView("redirect:/welcome/index.do");
-			} catch (Throwable th) {
-				result = createNewModelAndView(user, "customer.commit.error");
-			}
-		}
-		return result;
-	}
-
-	protected ModelAndView createNewModelAndView(Customer customer, String message) {
-		ModelAndView result;
-		result = new ModelAndView("customer/create");
-		result.addObject("customer", customer);
-		result.addObject("message", message);
-		return result;
-	}
-
-	@RequestMapping(value = "/list", method = RequestMethod.GET)
-	public ModelAndView list() {
-		ModelAndView result;
-
-		result = new ModelAndView("customer/list");
-		result.addObject("customer", customerService.findAll());
+		result = new ModelAndView("gym/list");
+		result.addObject("gyms", customer.getGyms());
+		result.addObject("a", a);
 
 		return result;
 	}
 	
-	/*@RequestMapping(value = "/actor/create", method = RequestMethod.GET)
-	public ModelAndView create() {
+	@RequestMapping("/gym/join")
+	public ModelAndView joinGym(@RequestParam Integer q) {
 		ModelAndView result;
 
-		result = createNewModelAndView(customerService.create(), null);
+		Gym gym= gymService.findOne(q);
+		Customer actual=(Customer)loginService.findActorByUserName(LoginService.getPrincipal().getId());
+		
+		List<Customer> customers= gym.getCustomers();
+		List<Gym> gyms= actual.getGyms();
+		customers.add(actual);
+		gym.setCustomers(customers);
+		gyms.add(gym);
+		actual.setGyms(gyms);
+		
+		try {
+			gymService.save(gym);
+			customerService.save(actual);
+			result = new ModelAndView("redirect:/welcome/index.do");
+		}catch (Throwable e) {
+			result = new ModelAndView("gym/list");
+			result.addObject("gyms", actual.getGyms());
+			result.addObject("a", 1);
+		}
 
 		return result;
 	}
-*/
+	
+	@RequestMapping("/gym/leave")
+	public ModelAndView leaveGym(@RequestParam Integer q) {
+		ModelAndView result;
 
-	@RequestMapping(value = "/actor/edit", method = RequestMethod.GET)
-	public ModelAndView edit(@RequestParam Customer customer) {
-		ModelAndView result = createEditModelAndView(customer, null);
+		Gym gym= gymService.findOne(q);
+		Customer actual=(Customer)loginService.findActorByUserName(LoginService.getPrincipal().getId());
 		
-		result.addObject(customer);
+		List<Customer> customers= gym.getCustomers();
+		List<Gym> gyms= actual.getGyms();
+		customers.remove(actual);
+		gym.setCustomers(customers);
+		gyms.remove(gym);
+		actual.setGyms(gyms);
 		
+		try {
+			gymService.save(gym);
+			customerService.save(actual);
+			result = new ModelAndView("redirect:/welcome/index.do");
+		}catch (Throwable e) {
+			result = new ModelAndView("gym/list");
+			result.addObject("gyms", actual.getGyms());
+			result.addObject("a", 1);
+		}
+
 		return result;
 	}
-
-	@RequestMapping(value="/actor/edit", method=RequestMethod.POST, params = "save")
-	public ModelAndView saveEdit(@Valid Customer customer, BindingResult binding) {
+	
+	
+	@RequestMapping("/activity/list")
+	public ModelAndView listActivities(@RequestParam Integer q,@RequestParam Integer a) {
 		ModelAndView result;
-		if (binding.hasErrors()) {
-			result = createEditModelAndView(customer, null);
-		} else {
-			try {
-				customerService.save(customer);
-				result = new ModelAndView("redirect:/customer/list.do");
-			} catch (Throwable th) {
-				result = createEditModelAndView(customer, "customer.commit.error");
+
+		Customer customer= (Customer)loginService.findActorByUserName(q);
+		List<Activity> activitiesLeave = new ArrayList<Activity>();
+		if(a==3) {
+			for(Gym gym: customer.getGyms()) {
+				for(Activity act: gym.getActivities()) {
+					if(!act.getCustomers().contains(customer)) {
+						activitiesLeave.add(act);
+					}
+				}
+			}
+		}else {
+			for(Gym gym: customer.getGyms()) {
+				for(Activity act: gym.getActivities()) {
+					if(act.getCustomers().contains(customer)) {
+						activitiesLeave.add(act);
+					}
+				}
 			}
 		}
-		return result;
-	}
-
-	protected ModelAndView createEditModelAndView(Customer customer, String message) {
-
-		ModelAndView result = new ModelAndView("customer/edit");
-		result.addObject("customer", customer);
-		result.addObject("message", message);
+		
+		
+		
+		result = new ModelAndView("activity/list");
+		result.addObject("activities", activitiesLeave);
+		result.addObject("a", a);
 
 		return result;
 	}
+	
+	
+	@RequestMapping("/activity/join")
+	public ModelAndView joinActivity(@RequestParam Integer q) {
+		ModelAndView result;
 
+		Activity act= activityService.findOne(q);
+		Customer actual=(Customer)loginService.findActorByUserName(LoginService.getPrincipal().getId());
+		List<Customer> customers=act.getCustomers();
+		customers.add(actual);
+		act.setCustomers(customers);
+
+		try {
+			activityService.save(act);
+			
+			result = new ModelAndView("redirect:/welcome/index.do");
+		}catch (Throwable e) {
+			result = new ModelAndView("redirect:/welcome/index.do");
+		}
+
+		return result;
+	}
+	
+	@RequestMapping("/activity/leave")
+	public ModelAndView leaveActivity(@RequestParam Integer q) {
+		ModelAndView result;
+
+		Activity act= activityService.findOne(q);
+		Customer actual=(Customer)loginService.findActorByUserName(LoginService.getPrincipal().getId());
+		List<Customer> customers=act.getCustomers();
+		customers.remove(actual);
+		act.setCustomers(customers);
+
+		try {
+			activityService.save(act);
+			
+			result = new ModelAndView("redirect:/welcome/index.do");
+		}catch (Throwable e) {
+			result = new ModelAndView("redirect:/welcome/index.do");
+		}
+
+		return result;
+	}
+	
+	
 }

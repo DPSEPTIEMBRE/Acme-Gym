@@ -2,34 +2,38 @@ package services;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collection;
 import java.util.List;
-
-import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.encoding.Md5PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 
-
-import repositories.CustomerRepository;
-import security.Authority;
-import security.UserAccount;
 import domain.Activity;
 import domain.Annotation;
 import domain.Customer;
 import domain.Gym;
+import repositories.CustomerRepository;
+import security.Authority;
+import security.UserAccount;
+import security.UserAccountRepository;
 
 @Service
 @Transactional
 public class CustomerService {
 
-
 	//Manager repositories
 
 	@Autowired
 	private CustomerRepository customerRepository;
+
+	@Autowired
+	private Md5PasswordEncoder encoder;
+	
+	@Autowired
+	private UserAccountRepository userAccountRepository;
+	
 
 	//Constructor
 
@@ -40,52 +44,41 @@ public class CustomerService {
 	//CRUD Methods
 
 	public Customer create() {
-		Customer customer = new Customer();
+		Customer customer= new Customer();
 
 		customer.setActorName(new String());
-		customer.setSurname(new String());
+		customer.setAnnotationStore(new ArrayList<Annotation>());
+		customer.setAnnotationWriter(new ArrayList<Annotation>());
+		customer.setCity(new String());
+		customer.setCountry(new String());
 		customer.setEmail(new String());
 		customer.setPhone(new String());
 		customer.setPostalAddress(new String());
-		customer.setCity(new String());
-		customer.setCountry(new String());
-		customer.setAnnotationWriter(new ArrayList<Annotation>());
-		customer.setAnnotationStore(new ArrayList<Annotation>());
-		customer.setGyms(new ArrayList<Gym>());
-		customer.setActivities(new ArrayList<Activity>());
-		
-		/*Authority a = new Authority();
-		a.setAuthority("CUSTOMER");
-		Collection<Authority> authorities = new ArrayList<Authority>();
-		authorities.add(a);
-		UserAccount ua = new UserAccount();
-		ua.setUsername(new String());
-		ua.setPassword(new String());
-		ua.setAuthorities(authorities);
-		customer.setUserAccount(ua);*/
-		
-		Authority a = new Authority();
-		a.setAuthority(Authority.CUSTOMER);
-		UserAccount account = new UserAccount();
-		account.setAuthorities(Arrays.asList(a));
+		customer.setSurname(new String());
+
+		Authority auth = new Authority();
+		auth.setAuthority("CUSTOMER");
+		UserAccount account= new UserAccount();
+		account.setAuthorities(Arrays.asList(auth));
+		account.setUsername(new String());
+		account.setPassword(new String());
+		account.setActivate(true);
+
 		customer.setUserAccount(account);
-		System.out.println(customer.getUserAccount());
-		
+		customer.setActivities(new ArrayList<Activity>());
+		customer.setGyms(new ArrayList<Gym>());
+
 		return customer;
 	}
 
-	public void save_create(Customer user){
-		
-		Md5PasswordEncoder password = new Md5PasswordEncoder();
-		String encodedPassword = password.encodePassword(user.getUserAccount().getPassword(), null);
-		user.getUserAccount().setPassword(encodedPassword);
-		Assert.notNull(user);
-		customerRepository.save(user);
+	public boolean exists(Integer arg0) {
+		Assert.notNull(arg0);
+		return customerRepository.exists(arg0);
 	}
-	
+
 	public List<Customer> findAll() {
 		return customerRepository.findAll();
-	}	
+	}
 
 	public void delete(Customer arg0) {
 		Assert.notNull(arg0);
@@ -103,13 +96,33 @@ public class CustomerService {
 		return customerRepository.save(entities);
 	}
 
-	public void save(Customer arg0) {
-		Assert.notNull(arg0);
-		customerRepository.save(arg0);
-	}
-	
-	public boolean exists(Integer arg0) {
-		return customerRepository.exists(arg0);
+	public Customer save(Customer customer) {
+		Assert.notNull(customer);
+		Customer cust = null;
+
+		if(exists(customer.getId())){
+			cust = findOne(customer.getId());
+			cust.setActorName(customer.getActorName());
+			cust.setCity(customer.getCity());
+			cust.setCountry(customer.getCountry());
+			cust.setEmail(customer.getEmail());
+			cust.setPhone(customer.getPhone());
+			cust.setPostalAddress(customer.getPostalAddress());
+			cust.setSurname(customer.getSurname());
+			cust.setActivities(customer.getActivities());
+			cust.setAnnotationStore(customer.getAnnotationStore());
+			cust.setAnnotationWriter(customer.getAnnotationWriter());
+			cust.setGyms(customer.getGyms());
+			cust.setUserAccount(customer.getUserAccount());
+			cust = customerRepository.save(cust);
+		}else{
+			UserAccount account = customer.getUserAccount();
+			account.setPassword(encoder.encodePassword(account.getPassword(), null));
+			account= userAccountRepository.save(account);
+			customer.setUserAccount(account);
+			cust = customerRepository.save(customer);
+		}
+		return cust;
 	}
 
 	//Others Methods
@@ -122,23 +135,41 @@ public class CustomerService {
 		return customerRepository.minMaxAvgDesviationGymsByCustomers();
 	}
 
-	public Object[] avgDesviationNotesWrittersByCustomers() {
-		return customerRepository.avgDesviationNotesWrittersByCustomers();
-	}
 
-	public Object[] avgDesviationNotesStoreByCustomers() {
-		return customerRepository.avgDesviationNotesStoreByCustomers();
+	public Object[] avgDesviationNotesByCustomers() {
+		return customerRepository.avgDesviationNotesByCustomers();
 	}
 
 	public Object[] avgDesviationStarsByCustomers() {
-		return customerRepository.avgDesviationStarsByCustomers();
+		Object[] res = customerRepository.avgDesviationStarsByCustomers();
+		 if(res==null) {
+			 Object[] aux = {0.0,0.0};
+			 res=aux;
+		 }
+		return res;
 	}
 
 	public Double avgStarsCountryByCustomers() {
-		return customerRepository.avgStarsCountryByCustomers();
+		Double res = customerRepository.avgStarsCountryByCustomers();
+		if(res==null) {
+			res=0.0;
+		}
+		return res;
 	}
 
 	public Double avgStarsCityByCustomers() {
-		return customerRepository.avgStarsCityByCustomers();
+		Double res = customerRepository.avgStarsCityByCustomers();
+		if(res==null) {
+			res=0.0;
+		}
+		return res;
 	}
+
+	public Double avgStarsByCustomer(int customer_id) {
+		Assert.notNull(customer_id);
+		return customerRepository.avgStarsByCustomer(customer_id);
+	}
+
+
+
 }

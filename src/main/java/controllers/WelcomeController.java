@@ -21,6 +21,7 @@ import org.springframework.web.servlet.ModelAndView;
 @Controller
 @RequestMapping("/welcome")
 public class WelcomeController extends AbstractController {
+	
 
 	// Constructors -----------------------------------------------------------
 
@@ -42,6 +43,36 @@ public class WelcomeController extends AbstractController {
 		result = new ModelAndView("welcome/index");
 		result.addObject("name", name);
 		result.addObject("moment", moment);
+
+		return result;
+	}
+	
+	@RequestMapping(value = "/cookies")
+	public ModelAndView cookies()  {
+		ModelAndView result;
+
+
+		result = new ModelAndView("legislation/cookies");
+
+		return result;
+	}
+	
+	@RequestMapping(value = "/lopd")
+	public ModelAndView lopd()  {
+		ModelAndView result;
+
+
+		result = new ModelAndView("legislation/lopd");
+
+		return result;
+	}
+	
+	@RequestMapping(value = "/lssi")
+	public ModelAndView lssi()  {
+		ModelAndView result;
+
+
+		result = new ModelAndView("legislation/lssi");
 
 		return result;
 	}

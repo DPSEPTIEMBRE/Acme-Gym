@@ -1,3 +1,4 @@
+
 package converters;
 
 import org.apache.commons.lang.StringUtils;
@@ -6,18 +7,17 @@ import org.springframework.core.convert.converter.Converter;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
-import repositories.AnnotationRepository;
 import domain.Annotation;
-
-
+import repositories.AnnotationRepository;
 
 @Component
 @Transactional
-public class StringToAnnotationConverter  implements Converter<String, Annotation> {
-	
+public class StringToAnnotationConverter implements Converter<String, Annotation> {
+
 	@Autowired
-	AnnotationRepository annotationRepository;
-	
+	AnnotationRepository arRepository;
+
+
 	@Override
 	public Annotation convert(String text) {
 		Annotation result;
@@ -27,7 +27,7 @@ public class StringToAnnotationConverter  implements Converter<String, Annotatio
 				result = null;
 			} else {
 				id = Integer.valueOf(text);
-				result =annotationRepository.findOne(id);
+				result = arRepository.findOne(id);
 			}
 		} catch (Exception oops) {
 			throw new IllegalArgumentException(oops);

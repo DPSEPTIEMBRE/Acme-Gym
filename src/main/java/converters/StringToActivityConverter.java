@@ -1,3 +1,4 @@
+
 package converters;
 
 import org.apache.commons.lang.StringUtils;
@@ -6,18 +7,17 @@ import org.springframework.core.convert.converter.Converter;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
-import repositories.ActivityRepository;
 import domain.Activity;
-
-
+import repositories.ActivityRepository;
 
 @Component
 @Transactional
-public class StringToActivityConverter  implements Converter<String, Activity> {
-	
+public class StringToActivityConverter implements Converter<String, Activity> {
+
 	@Autowired
-	ActivityRepository activityRepository;
-	
+	ActivityRepository arRepository;
+
+
 	@Override
 	public Activity convert(String text) {
 		Activity result;
@@ -27,11 +27,12 @@ public class StringToActivityConverter  implements Converter<String, Activity> {
 				result = null;
 			} else {
 				id = Integer.valueOf(text);
-				result =activityRepository.findOne(id);
+				result = arRepository.findOne(id);
 			}
 		} catch (Exception oops) {
 			throw new IllegalArgumentException(oops);
 		}
 		return result;
 	}
+
 }

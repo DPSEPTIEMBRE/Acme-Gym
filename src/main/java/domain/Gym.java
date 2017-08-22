@@ -27,10 +27,16 @@ public class Gym extends DomainEntity {
 	private List<Customer>		customers;
 	private List<Activity>		activities;
 	private List<Annotation>	annotations;
+	private Boolean				isDelete;
 
 
 	//Getters
 	
+	@NotNull
+	public Boolean getIsDelete() {
+		return isDelete;
+	}
+
 	@NotBlank
 	@URL
 	public String getLogo() {
@@ -77,6 +83,11 @@ public class Gym extends DomainEntity {
 	}
 
 	//Setters
+	
+	public void setIsDelete(Boolean isDelete) {
+		this.isDelete = isDelete;
+	}
+	
 	public void setLogo(String logo) {
 		this.logo = logo;
 	}

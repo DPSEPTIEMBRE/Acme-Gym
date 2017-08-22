@@ -20,20 +20,26 @@
 	<util:list id="converters">
 		<!-- 
 			Add your own converters using entries of the following form: 
-			<bean class="converters.Class1ToClass2" /> 
+			<bean class="converters.Class1ToClass2" />
 		-->
-		<bean class="converters.ActorToStringConverter" />
-		<bean class="converters.StringToActorConverter" />
-		<bean class="converters.ActivityToStringConverter" />
-		<bean class="converters.StringToActivityConverter" />
-		<bean class="converters.AnnotationToStringConverter" />
-		<bean class="converters.StringToAnnotationConverter" />
-		<bean class="converters.GymToStringConverter" />
-		<bean class="converters.StringToGymConverter" />
-		<bean class="converters.AuthorityToStringConverter" />
-		<bean class="converters.StringToAuthorityConverter" />
-		<bean class="converters.CustomerToStringConverter" />
-		<bean class="converters.StringToCustomerConverter" />
+		
+		<bean class="converters.ActivityToStringConverter"/>
+		<bean class="converters.ActorToStringConverter"/>
+		<bean class="converters.AnnotationToStringConverter"/>
+		<bean class="converters.AuthorityToStringConverter"/>
+		<bean class="converters.GymToStringConverter"/>
+		<bean class="converters.ManagerToStringConverter"/>
+		<bean class="converters.TrainerToStringConverter"/>
+		<bean class="converters.CustomerToStringConverter"/>
+		
+		<bean class="converters.StringToActivityConverter"/>
+		<bean class="converters.StringToActorConverter"/>
+		<bean class="converters.StringToAnnotationConverter"/>
+		<bean class="converters.StringToAuthorityConverter"/>
+		<bean class="converters.StringToGymConverter"/>
+		<bean class="converters.StringToManagerConverter"/>
+		<bean class="converters.StringToTrainerConverter"/>
+		<bean class="converters.StingToCustomerConverter"/>
 	</util:list>
 	
 </beans>
