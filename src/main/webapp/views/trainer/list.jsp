@@ -17,6 +17,10 @@
 <%@taglib prefix="display" uri="http://displaytag.sf.net"%>
 <%@taglib prefix="acme" tagdir="/WEB-INF/tags"%>
 
+<label><spring:message code="trainer.text" /> </label>
+<input type="text" id="trainerSearch" /> 
+<button type="button" class="btn btn-primary" >  <spring:message code="trainer.search" /></button>
+
 <security:authorize access="hasRole('MANAGER')"> 
 
 <jstl:if test="${a==1}">
@@ -51,3 +55,31 @@ entityUrl="{annotationStore: annotation/listByTrainer.do}" />
 
 
 </security:authorize>
+
+<script>
+$(document).ready(function(){
+    $("button").click(function(){
+        $.ajax({success: function(result){
+        	var input, filter, table, tr, tdName,tdSurname,i;
+        	input = document.getElementById("trainerSearch");
+        	filter = input.value.toUpperCase();
+        	table = document.getElementById("row");
+        	tr = table.getElementsByTagName("tr");
+        	for (i = 0; i < tr.length; i++) {
+        		tdName = tr[i].getElementsByTagName("td")[0];
+        		tdSurname = tr[i].getElementsByTagName("td")[1];
+        		if (tdName || tdSurname) {
+        			if ((tdName.innerHTML.toUpperCase().indexOf(filter) > -1 || 
+        				tdSurname.innerHTML.toUpperCase().indexOf(filter) > -1)){
+	          	        tr[i].style.display = "";
+	          	      } else {
+	          	        tr[i].style.display = "none";
+	          	      }
+        			
+        			}
+          	      
+        	}
+        }});
+    });
+});
+</script>
