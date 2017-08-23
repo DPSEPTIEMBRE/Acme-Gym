@@ -66,7 +66,7 @@ extraColumns="{leave: customer/gym/leave.do, newAnnotation: annotation/create.do
 
 </jstl:if>
 
-<jstl:if test="${a==1}">
+<jstl:if test="${a==3}">
 
 <acme:list list="${gyms}" requestURI="gym/list.do" hidden_fields="customers,trainers,id,version,isDelete" 
 entityUrl="{activities: activity/listByGym.do,annotations: annotation/listByGym.do}" 
@@ -74,7 +74,7 @@ extraColumns="{join: customer/gym/join.do, newAnnotation: annotation/create.do}"
 
 </jstl:if>
 
-<jstl:if test="${a==3}">
+<jstl:if test="${a==1}">
 
 <acme:list list="${gyms}" requestURI="gym/list.do" hidden_fields="customers,trainers,id,version,isDelete" 
 entityUrl="{activities: activity/listByGym.do,annotations: annotation/listByGym.do}" 

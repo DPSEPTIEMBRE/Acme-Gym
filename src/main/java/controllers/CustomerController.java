@@ -77,7 +77,7 @@ public class CustomerController extends AbstractController{
 		}catch (Throwable e) {
 			result = new ModelAndView("gym/list");
 			result.addObject("gyms", actual.getGyms());
-			result.addObject("a", 1);
+			result.addObject("a", 2);
 		}
 
 		return result;
@@ -104,7 +104,7 @@ public class CustomerController extends AbstractController{
 		}catch (Throwable e) {
 			result = new ModelAndView("gym/list");
 			result.addObject("gyms", actual.getGyms());
-			result.addObject("a", 1);
+			result.addObject("a", 2);
 		}
 
 		return result;

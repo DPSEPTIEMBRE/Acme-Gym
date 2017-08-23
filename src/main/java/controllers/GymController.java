@@ -64,12 +64,10 @@ public class GymController extends AbstractController{
 
 		}
 
-
-
 		result = new ModelAndView("gym/list");
 		result.addObject("gyms", gyms);
 		result.addObject("a", a);
-
+		
 		return result;
 	}
 
