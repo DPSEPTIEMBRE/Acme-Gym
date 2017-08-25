@@ -24,8 +24,6 @@ public class AdministratorService {
 	@Autowired
 	private AdministratorRepository administratorRepository;
 
-	@Autowired
-	private AnnotationService annotationService;
 	//Constructor
 
 	public AdministratorService() {
