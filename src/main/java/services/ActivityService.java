@@ -37,7 +37,7 @@ public class ActivityService {
 	
 	public Activity create() {
 		Activity act= new Activity();
-		
+
 		act.setAnnotations(new ArrayList<Annotation>());
 		act.setCustomers(new ArrayList<Customer>());
 		act.setDayWeek(new Integer(1));

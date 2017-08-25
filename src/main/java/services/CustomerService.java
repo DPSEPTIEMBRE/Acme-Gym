@@ -28,8 +28,8 @@ public class CustomerService {
 	@Autowired
 	private CustomerRepository customerRepository;
 
-	@Autowired
-	private Md5PasswordEncoder encoder;
+//	@Autowired
+//	private Md5PasswordEncoder encoder;
 	
 	@Autowired
 	private UserAccountRepository userAccountRepository;
@@ -117,7 +117,7 @@ public class CustomerService {
 			cust = customerRepository.save(cust);
 		}else{
 			UserAccount account = customer.getUserAccount();
-			account.setPassword(encoder.encodePassword(account.getPassword(), null));
+			account.setPassword(new Md5PasswordEncoder().encodePassword(account.getPassword(), null));
 			account= userAccountRepository.save(account);
 			customer.setUserAccount(account);
 			cust = customerRepository.save(customer);

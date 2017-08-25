@@ -1,8 +1,10 @@
 package services;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.transaction.Transactional;
+import javax.validation.ConstraintViolationException;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -18,7 +20,6 @@ import utilities.AbstractTest;
 import domain.Activity;
 import domain.Customer;
 import domain.Gym;
-import domain.Manager;
 
 @Transactional
 @ContextConfiguration(locations = {
@@ -75,7 +76,8 @@ public class ActivityServiceTest extends AbstractTest {
 		try {
 			this.authenticate(username);
 
-			activityService.findOne(activityID);
+			Activity a = activityService.findOne(activityID);
+			Assert.notNull(a);
 
 			this.unauthenticate();
 
@@ -100,6 +102,7 @@ public class ActivityServiceTest extends AbstractTest {
 			this.authenticate(username);
 			
 			//Registering
+			Assert.isTrue(username == "manager1" || username == "manager2");
 			Gym gym = gymService.findOne(gymID);
 
 			Activity res;
@@ -111,6 +114,7 @@ public class ActivityServiceTest extends AbstractTest {
 			Assert.notNull(startTime);
 			Assert.notNull(endTime);
 			Assert.notNull(numSeats);
+			Assert.isTrue(numSeats > 0);
 
 			res.setTitle(title);
 			res.setDescription(description);
@@ -119,6 +123,7 @@ public class ActivityServiceTest extends AbstractTest {
 			res.setEndTime(endTime);
 			res.setNumSeats(numSeats);
 			res.setGym(gym);
+			res.setPictures(pictures);
 			res.setIsCancelled(false);
 			
 			activityService.save(res);
@@ -152,6 +157,7 @@ public class ActivityServiceTest extends AbstractTest {
 			this.authenticate(username);
 			
 			//Joining
+			Assert.isTrue(username == "customer" || username == "customer2");
 			Customer c = (Customer) loginService.findActorByUserName(customerID);
 			Activity a = activityService.findOne(activityID);
 			List<Customer> list = a.getCustomers();
@@ -182,10 +188,10 @@ public class ActivityServiceTest extends AbstractTest {
 			{"manager1", 48, null},
 			
 			//Test #02: Access by anonymous user to non existing activity. Expected false.
-			{null, 78, IllegalArgumentException.class},
+			{null, 78, NullPointerException.class},
 
 			//Test #03: Access by authorized user to non existing activity. Expected false.
-			{"administrator", 78, IllegalArgumentException.class}
+			{"administrator", 78, NullPointerException.class}
 
 		};
 		for (int i = 0; i < testingData.length; i++)
@@ -201,29 +207,32 @@ public class ActivityServiceTest extends AbstractTest {
 			{"trainer2", 49, null},
 			
 			//Test #02: Access by anonymous user to non existing activity. Expected false.
-			{null, 84, IllegalArgumentException.class},
+			{null, 184, IllegalArgumentException.class},
 
 			//Test #03: Access by authorized user to non existing activity. Expected false.
 			{"administrator", 84, IllegalArgumentException.class}
 
 		};
 		for (int i = 0; i < testingData.length; i++)
-			this.searchActivitiesTemplate((String) testingData[i][0], (Integer) testingData[i][1], (Class<?>) testingData[i][1]);
+			this.searchActivitiesTemplate((String) testingData[i][0], (Integer) testingData[i][1], (Class<?>) testingData[i][2]);
 	}
 
 	@Test
 	public void manageActivityDriver() {
 		
+		List<String> pictures = new ArrayList<String>();
+		pictures.add("https://i.ytimg.com/vi/iWm0beJM6Bk/maxresdefault.jpg");
+		
 		final Object testingData[][] = {
 	
 			//Test #01: Management by authorized manager. Expected true.
-			{"manager1", 40, 42, "activity", null, "description", 1, "00:00", "10:00", 30, null},
+			{"manager1", 40, 42, "activity", pictures, "description", 3, "10:00", "20:00", 10, null},
 			
-			//Test #01: Search by anonymous user. Expected false.
-			{null, 40, 42, "activity", null, "description", 1, "00:00", "10:00", 30, IllegalArgumentException.class},
+			//Test #02: Search by anonymous user. Expected false.
+			{null, 40, 42, "activity", pictures, "description", 1, "00:00", "10:00", 10, IllegalArgumentException.class},
 			
-			//Test #01: Negative number of seats introduced. Expected false.
-			{"manager1", 40, 42, "activity", null, "description", 1, "00:00", "10:00", -30, IllegalArgumentException.class}
+			//Test #03: Negative number of seats introduced. Expected false.
+			{"manager1", 40, 42, "activity", pictures, "description", 1, "00:00", "10:00", -30, IllegalArgumentException.class}
 				
 		};
 		for (int i = 0; i < testingData.length; i++)
@@ -238,13 +247,13 @@ public class ActivityServiceTest extends AbstractTest {
 		final Object testingData[][] = {
 				
 			//Test #01: Access by customer. Expected true.
-			{"customer1", 44, 48, null},
+			{"customer", 44, 48, null},
 			
 			//Test #02: Access by anonymous user. Expected false.
 			{null, 44, 48, IllegalArgumentException.class},
 			
 			//Test #03: Access by authorized user to non existing activity. Expected false.
-			{"customer2", 45, 108, IllegalArgumentException.class}
+			{"customer2", 45, 108, NullPointerException.class}
 
 		};
 		for (int i = 0; i < testingData.length; i++)

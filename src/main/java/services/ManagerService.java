@@ -31,8 +31,8 @@ public class ManagerService {
 	@Autowired
 	private UserAccountRepository userAccountRepository;
 
-	@Autowired
-	private Md5PasswordEncoder encoder;
+//	@Autowired
+//	private Md5PasswordEncoder encoder;
 	
 
 	//Constructor
@@ -117,7 +117,7 @@ public class ManagerService {
 
 		}else{
 			UserAccount account = manager.getUserAccount();
-			account.setPassword(encoder.encodePassword(account.getPassword(), null));
+			account.setPassword(new Md5PasswordEncoder().encodePassword(account.getPassword(), null));
 			account= userAccountRepository.save(account);
 			manager.setUserAccount(account);
 			mana = managerRepository.save(manager);

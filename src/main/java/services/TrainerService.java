@@ -27,8 +27,8 @@ public class TrainerService {
 	@Autowired
 	private TrainerRepository trainerRepository;
 
-	@Autowired
-	private Md5PasswordEncoder encoder;
+//	@Autowired
+//	private Md5PasswordEncoder encoder;
 
 	@Autowired
 	private UserAccountRepository userAccountRepository;
@@ -110,7 +110,7 @@ public class TrainerService {
 			trai = trainerRepository.save(trai);
 		}else{
 			UserAccount account = trainer.getUserAccount();
-			account.setPassword(encoder.encodePassword(account.getPassword(), null));
+			account.setPassword(new Md5PasswordEncoder().encodePassword(account.getPassword(), null));
 			account= userAccountRepository.save(account);
 			trainer.setUserAccount(account);
 			trai = trainerRepository.save(trainer);
