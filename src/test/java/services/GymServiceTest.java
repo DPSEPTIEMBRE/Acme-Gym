@@ -14,6 +14,7 @@ import org.springframework.util.Assert;
 
 import security.LoginService;
 import utilities.AbstractTest;
+import domain.Customer;
 import domain.Gym;
 import domain.Manager;
 
@@ -122,6 +123,35 @@ public class GymServiceTest extends AbstractTest {
 		this.checkExceptions(expected, caught);
 	}
 	
+	/*
+	 * 7.1: An actor authenticated as customer must be able to join or leave a gym.
+	 */
+	public void joinLeaveGymTemplate(final String username, final Integer customerID, final Integer gymID, final Class<?> expected) {
+		Class<?> caught = null;
+
+		try {
+			this.authenticate(username);
+
+			//Joining
+			Customer c = (Customer) loginService.findActorByUserName(customerID);
+			Gym g = gymService.findOne(gymID);
+			List<Customer> list = g.getCustomers();
+			list.add(c);	
+			
+			//Leaving
+			list.remove(list.size()-1);
+
+			this.unauthenticate();
+
+		} catch (final Throwable oops) {
+
+			caught = oops.getClass();
+
+		}
+
+		this.checkExceptions(expected, caught);
+	}
+	
 	//Drivers
 
 	@Test
@@ -197,6 +227,25 @@ public class GymServiceTest extends AbstractTest {
 			this.manageGymTemplate((String) testingData[i][0], (Integer) testingData[i][1], (String) testingData[i][2], (String) testingData[i][3],
 					(String) testingData[i][4], (Double) testingData[i][5], (String) testingData[i][6], (String) testingData[i][7],
 					(String) testingData[i][8], (Double) testingData[i][9], (Class<?>) testingData[i][10]);
+	}
+	
+	@Test
+	public void joinLeaveGymDriver() {
+
+		final Object testingData[][] = {
+				
+			//Test #01: Access by customer. Expected true.
+			{"customer1", 44, 43,  null},
+			
+			//Test #02: Access by unauthorized user. Expected false.
+			{"manager1", 44, 43, IllegalArgumentException.class},
+			
+			//Test #03: Access by authorized user to non existing gym. Expected false.
+			{"customer1", 44, 103, IllegalArgumentException.class}
+
+		};
+		for (int i = 0; i < testingData.length; i++)
+			this.joinLeaveGymTemplate((String) testingData[i][0], (Integer) testingData[i][1], (Integer) testingData[i][2], (Class<?>) testingData[i][3]);
 	}
 
 }

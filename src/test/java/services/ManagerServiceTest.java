@@ -12,6 +12,7 @@ import org.springframework.util.Assert;
 
 import security.LoginService;
 import utilities.AbstractTest;
+import domain.Administrator;
 import domain.Manager;
 
 @Transactional
@@ -105,6 +106,29 @@ public class ManagerServiceTest extends AbstractTest {
 		this.checkExceptions(expected, caught);
 	}
 
+	/*
+	 * 8.1: An administrator must be able to ban or unban a manager.
+	 */
+	public void managerBanTemplate(final String username, final Integer adminID, final Integer managerID, final Class<?> expected) {
+		Class<?> caught = null;
+
+		try {
+			this.authenticate(username);
+			
+			Manager m = (Manager) loginService.findActorByUserName(managerID);
+			m.getUserAccount().setActivate(false);
+			
+			this.unauthenticate();
+
+		} catch (final Throwable oops) {
+
+			caught = oops.getClass();
+
+		}
+
+		this.checkExceptions(expected, caught);
+	}
+	
 	//Drivers
 
 	@Test
@@ -146,4 +170,24 @@ public class ManagerServiceTest extends AbstractTest {
 			this.managerEditTemplate((String) testingData[i][0], (Integer) testingData[i][1], (String) testingData[i][2], (String) testingData[i][3], (String) testingData[i][4], (String) testingData[i][5], (String) testingData[i][6],
 				(String) testingData[i][7], (String) testingData[i][8], (Class<?>) testingData[i][9]);
 	}
+	
+	@Test
+	public void managerBanDriver() {
+
+		final Object testingData[][] = {
+				
+			//Test #01: Access with authorized account. Expected true.
+			{"administrator", 39, 40, null},
+			
+			//Test #02: Access with unauthorized account. Expected false.
+			{"customer2", 39, 40, IllegalArgumentException.class},
+			
+			//Test #03: Attempt to ban an unexistent manager. Expected false.
+			{"administrator", 39, 144, IllegalArgumentException.class}
+
+		};
+		for (int i = 0; i < testingData.length; i++)
+			this.managerBanTemplate((String) testingData[i][0], (Integer) testingData[i][1], (Integer) testingData[i][2], (Class<?>) testingData[i][3]);
+	}
+	
 }

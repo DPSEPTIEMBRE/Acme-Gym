@@ -16,6 +16,7 @@ import org.springframework.util.Assert;
 import security.LoginService;
 import utilities.AbstractTest;
 import domain.Activity;
+import domain.Customer;
 import domain.Gym;
 import domain.Manager;
 
@@ -141,6 +142,35 @@ public class ActivityServiceTest extends AbstractTest {
 		this.checkExceptions(expected, caught);
 	}
 	
+	/*
+	 * 7.2: A customer must be able to join or leave an activity in one of the gym's he's joined, as long as there are available seats.
+	 */
+	public void joinLeaveActivityTemplate(final String username, final Integer customerID, final Integer activityID, final Class<?> expected) {
+		Class<?> caught = null;
+
+		try {
+			this.authenticate(username);
+			
+			//Joining
+			Customer c = (Customer) loginService.findActorByUserName(customerID);
+			Activity a = activityService.findOne(activityID);
+			List<Customer> list = a.getCustomers();
+			list.add(c);	
+			
+			//Leaving
+			list.remove(list.size()-1);
+
+			this.unauthenticate();
+
+		} catch (final Throwable oops) {
+
+			caught = oops.getClass();
+
+		}
+
+		this.checkExceptions(expected, caught);
+	}
+	
 	//Drivers
 
 	@Test
@@ -202,4 +232,23 @@ public class ActivityServiceTest extends AbstractTest {
 					(String) testingData[i][8], (Integer) testingData[i][9], (Class<?>) testingData[i][10]);
 	}
 
+	@Test
+	public void joinLeaveActivityDriver() {
+
+		final Object testingData[][] = {
+				
+			//Test #01: Access by customer. Expected true.
+			{"customer1", 44, 48, null},
+			
+			//Test #02: Access by anonymous user. Expected false.
+			{null, 44, 48, IllegalArgumentException.class},
+			
+			//Test #03: Access by authorized user to non existing activity. Expected false.
+			{"customer2", 45, 108, IllegalArgumentException.class}
+
+		};
+		for (int i = 0; i < testingData.length; i++)
+			this.joinLeaveActivityTemplate((String) testingData[i][0], (Integer) testingData[i][1], (Integer) testingData[i][2], (Class<?>) testingData[i][3]);
+	}
+	
 }
