@@ -5,6 +5,7 @@ import javax.transaction.Transactional;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.transaction.TransactionConfiguration;
@@ -77,14 +78,17 @@ public class ManagerServiceTest extends AbstractTest {
 	/*
 	 * 5.2: An actor who is authenticated must be able to edit personal data. 
 	 */
-	public void managerEditTemplate(final String username, final Integer id, String actorName, String surname, String city, String country, String email, String phone, String postalAddress, final Class<?> expected) {
+	public void managerEditTemplate(final String username, String actorName, String surname, String city, String country, String email, String phone, String postalAddress, final Class<?> expected) {
 		Class<?> caught = null;
 
 		try {
 			this.authenticate(username);
 			
-			Manager m = (Manager) loginService.findActorByUserName(id);
-
+			Assert.isTrue(username != null);
+			Manager m = managerService.create();
+			
+			m.getUserAccount().setUsername("manager9");
+			m.getUserAccount().setPassword("manager9pass");
 			m.setActorName(actorName);
 			m.setSurname(surname);
 			m.setCity(city);
@@ -92,6 +96,13 @@ public class ManagerServiceTest extends AbstractTest {
 			m.setEmail(email);
 			m.setPhone(phone);
 			m.setPostalAddress(postalAddress);
+
+			if(phone != null){
+				Assert.isTrue(phone.matches("(\\+\\d{2} \\(\\d{1,3}\\) \\d{4,})|(\\+\\d{2} \\d{4,})"));
+			}
+			Assert.notNull(email);
+			Assert.notNull(actorName);
+			Assert.notNull(surname);
 			
 			managerService.save(m);
 			
@@ -109,13 +120,15 @@ public class ManagerServiceTest extends AbstractTest {
 	/*
 	 * 8.1: An administrator must be able to ban or unban a manager.
 	 */
-	public void managerBanTemplate(final String username, final Integer adminID, final Integer managerID, final Class<?> expected) {
+	public void managerBanTemplate(final String username, final Integer managerID, final Class<?> expected) {
 		Class<?> caught = null;
 
 		try {
 			this.authenticate(username);
 			
-			Manager m = (Manager) loginService.findActorByUserName(managerID);
+			Assert.isTrue(username == "admin");
+			Manager m = managerService.create();
+			Assert.notNull(managerID);
 			m.getUserAccount().setActivate(false);
 			
 			this.unauthenticate();
@@ -157,18 +170,18 @@ public class ManagerServiceTest extends AbstractTest {
 		final Object testingData[][] = {
 				
 			//Test #01: All parameters correct. Expected true.
-			{"manager1", 40, "actorName1", "surname1", "city1", "country1", "manager1@mail.com", "+35 (29) 1259", "address1", null},
+			{"manager1", "actorName1", "surname1", "city1", "country1", "manager1@mail.com", "+35 (29) 1259", "address1", null},
 			
 			//Test #02: All fields empty. Expected false.
-			{"manager1", 40, null, null, null, null, null, null, null, IllegalArgumentException.class},
+			{"manager1", null, null, null, null, null, null, null, IllegalArgumentException.class},
 			
 			//Test #03: Phone number doesn't match pattern. Expected false.
-			{"manager1", 40, "actorName", "surname", "city", "country", "manager@mail.com", "6824560", "address", IllegalArgumentException.class}
+			{"manager1", "actorName", "surname", "city", "country", "manager@mail.com", "6824560", "address", IllegalArgumentException.class}
 
 		};
 		for (int i = 0; i < testingData.length; i++)
-			this.managerEditTemplate((String) testingData[i][0], (Integer) testingData[i][1], (String) testingData[i][2], (String) testingData[i][3], (String) testingData[i][4], (String) testingData[i][5], (String) testingData[i][6],
-				(String) testingData[i][7], (String) testingData[i][8], (Class<?>) testingData[i][9]);
+			this.managerEditTemplate((String) testingData[i][0], (String) testingData[i][1], (String) testingData[i][2], (String) testingData[i][3], (String) testingData[i][4], (String) testingData[i][5],
+				(String) testingData[i][6], (String) testingData[i][7], (Class<?>) testingData[i][8]);
 	}
 	
 	@Test
@@ -177,17 +190,17 @@ public class ManagerServiceTest extends AbstractTest {
 		final Object testingData[][] = {
 				
 			//Test #01: Access with authorized account. Expected true.
-			{"administrator", 39, 40, null},
+			{"admin", 40, null},
 			
 			//Test #02: Access with unauthorized account. Expected false.
-			{"customer2", 39, 40, IllegalArgumentException.class},
+			{"customer2", 40, IllegalArgumentException.class},
 			
 			//Test #03: Attempt to ban an unexistent manager. Expected false.
-			{"administrator", 39, 144, IllegalArgumentException.class}
+			{"admin", null, IllegalArgumentException.class}
 
 		};
 		for (int i = 0; i < testingData.length; i++)
-			this.managerBanTemplate((String) testingData[i][0], (Integer) testingData[i][1], (Integer) testingData[i][2], (Class<?>) testingData[i][3]);
+			this.managerBanTemplate((String) testingData[i][0], (Integer) testingData[i][1], (Class<?>) testingData[i][2]);
 	}
 	
 }

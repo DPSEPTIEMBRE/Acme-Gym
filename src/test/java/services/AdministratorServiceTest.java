@@ -11,7 +11,6 @@ import org.springframework.test.context.transaction.TransactionConfiguration;
 import org.springframework.util.Assert;
 
 import utilities.AbstractTest;
-import domain.Administrator;
 
 @Transactional
 @ContextConfiguration(locations = {
@@ -53,6 +52,7 @@ public class AdministratorServiceTest extends AbstractTest {
 		try {
 			this.authenticate(username);
 			
+			Assert.isTrue(username == "admin");
 			activityService.avgStarsByActivity(activityID);
 			administratorService.avgStarsCityByAdministrators();
 			customerService.avgStarsCityByCustomers();
@@ -79,13 +79,13 @@ public class AdministratorServiceTest extends AbstractTest {
 		final Object testingData[][] = {
 				
 			//Test #01: Access as administrator. Expected true.
-			{"administrator", 48, null},
+			{"admin", 48, null},
 			
 			//Test #02: Access as unauthorized user. Expected false.
 			{"manager1", 48, IllegalArgumentException.class},
 			
 			//Test #03: Attempt to access a null activity. Expected false.
-			{"administrator", null, IllegalArgumentException.class},
+			{"admin", null, NullPointerException.class},
 
 		};
 		for (int i = 0; i < testingData.length; i++)

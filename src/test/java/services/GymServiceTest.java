@@ -3,6 +3,7 @@ package services;
 import java.util.List;
 
 import javax.transaction.Transactional;
+import javax.validation.ConstraintViolationException;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -71,17 +72,17 @@ public class GymServiceTest extends AbstractTest {
 	 * 6.1: An actor authenticated as manager must be able to manage his or her gyms, which includes listing,
 	 * 		creating, editing and deleting them.
 	 */
-	public void manageGymTemplate(final String username, final Integer id, String logo, String name, String address,
-			Double fee, String logo2, String name2, String address2,
-			Double fee2, final Class<?> expected) {
+	public void manageGymTemplate(final String username, String logo, String name, String address,
+			Double fee, String logo2, String name2, String address2, Double fee2, final Class<?> expected) {
 		Class<?> caught = null;
 
 		try {
 			this.authenticate(username);
 			
 			//Listing
-			Manager manager = (Manager) loginService.findActorByUserName(id);
-			managerService.gymsByManager(id);
+			Assert.isTrue(username == "manager1" || username == "manager2");
+			Manager manager = managerService.create();
+			managerService.gymsByManager(manager.getId());
 			
 			//Creating
 			Gym res;
@@ -97,6 +98,7 @@ public class GymServiceTest extends AbstractTest {
 			res.setName(name);
 			res.setAddress(address);
 			res.setFee(fee);
+			Assert.isTrue(fee >= 0);
 			res.setIsDelete(false);
 			List<Gym> list = manager.getGyms();
 			list.add(res);
@@ -133,6 +135,7 @@ public class GymServiceTest extends AbstractTest {
 			this.authenticate(username);
 
 			//Joining
+			Assert.isTrue(username == "customer1" || username == "customer2");
 			Customer c = (Customer) loginService.findActorByUserName(customerID);
 			Gym g = gymService.findOne(gymID);
 			List<Customer> list = g.getCustomers();
@@ -160,13 +163,13 @@ public class GymServiceTest extends AbstractTest {
 		final Object testingData[][] = {
 				
 			//Test #01: Access by anonymous user. Expected true.
-			{null, 42, 48,  null},
+			{null, 42, 48, null},
 			
 			//Test #02: Access by anonymous user to non existing gym. Expected false.
-			{null, 108, 48, IllegalArgumentException.class},
+			{null, null, 48, NullPointerException.class},
 			
 			//Test #03: Access by authorized user to non existing activity. Expected false.
-			{"customer1", 42, 104, IllegalArgumentException.class}
+			{"customer1", 42, null, NullPointerException.class}
 
 		};
 		for (int i = 0; i < testingData.length; i++)
@@ -179,54 +182,54 @@ public class GymServiceTest extends AbstractTest {
 		final Object testingData[][] = {
 				
 			//Test #01: Access by manager, all parameters correct. Expected true.
-			{"manager1", 40, "https://i.ytimg.com/vi/iWm0beJM6Bk/maxresdefault.jpg", "gym", "gym street", 22.00,
+			{"manager2", "https://i.ytimg.com/vi/iWm0beJM6Bk/maxresdefault.jpg", "gym", "gym street", 22.00,
 				"https://i.ytimg.com/vi/iWm0beJM6Bk/maxresdefault.jpg", "gym2", "gym2 street", 1000.00, null},
 				
 			//Test #02: Access by anonymous user. Expected false.
-			{null, 40, "https://i.ytimg.com/vi/iWm0beJM6Bk/maxresdefault.jpg", "gym", "gym street", 22.00,
+			{null, "https://i.ytimg.com/vi/iWm0beJM6Bk/maxresdefault.jpg", "gym", "gym street", 22.00,
 				"https://i.ytimg.com/vi/iWm0beJM6Bk/maxresdefault.jpg", "gym2", "gym2 street", 1000.00, IllegalArgumentException.class},
 				
 			//Test #03: Access by unauthorized user. Expected false.
-			{"trainer1", 40, "https://i.ytimg.com/vi/iWm0beJM6Bk/maxresdefault.jpg", "gym", "gym street", 22.00,
+			{"trainer1", "https://i.ytimg.com/vi/iWm0beJM6Bk/maxresdefault.jpg", "gym", "gym street", 22.00,
 				"https://i.ytimg.com/vi/iWm0beJM6Bk/maxresdefault.jpg", "gym2", "gym2 street", 1000.00, IllegalArgumentException.class},
 				
 			//Test #04: Empty fields in creating. Expected false.
-			{"manager1", 40, null, null, null, null,
-				"https://i.ytimg.com/vi/iWm0beJM6Bk/maxresdefault.jpg", "gym2", "gym2 street", 1000.00, IllegalArgumentException.class},
+			{"manager1", null, null, null, null,
+					"https://i.ytimg.com/vi/iWm0beJM6Bk/maxresdefault.jpg", "gym2", "gym2 street", 1000.00, IllegalArgumentException.class},
 					
 			//Test #05: Empty fields in editing. Expected false.
-			{"manager1", 40, "https://i.ytimg.com/vi/iWm0beJM6Bk/maxresdefault.jpg", "gym", "gym street", 22.00,
-				null, null, null, null, IllegalArgumentException.class},
+			{"manager1", "https://i.ytimg.com/vi/iWm0beJM6Bk/maxresdefault.jpg", "gym", "gym street", 22.00,
+				null, null, null, null, ConstraintViolationException.class},
 						
 			//Test #06: Introduced negative value on fee in creation. Expected false.
-			{"manager1", 40, "https://i.ytimg.com/vi/iWm0beJM6Bk/maxresdefault.jpg", "gym", "gym street", -22.00,
-				"https://i.ytimg.com/vi/iWm0beJM6Bk/maxresdefault.jpg", "gym2", "gym2 street", 1000.00, IllegalArgumentException.class},
+			{"manager1", "https://i.ytimg.com/vi/iWm0beJM6Bk/maxresdefault.jpg", "gym", "gym street", -22.00,
+				"https://i.ytimg.com/vi/iWm0beJM6Bk/maxresdefault.jpg", "gym2", "gym2 street", 1000.00, ConstraintViolationException.class},
 				
 			//Test #07: Introduced negative value on fee in editing. Expected false.
-			{"manager1", 40, "https://i.ytimg.com/vi/iWm0beJM6Bk/maxresdefault.jpg", "gym", "gym street", 22.00,
-				"https://i.ytimg.com/vi/iWm0beJM6Bk/maxresdefault.jpg", "gym2", "gym2 street", -22.00, IllegalArgumentException.class},
+			{"manager1", "https://i.ytimg.com/vi/iWm0beJM6Bk/maxresdefault.jpg", "gym", "gym street", 22.00,
+				"https://i.ytimg.com/vi/iWm0beJM6Bk/maxresdefault.jpg", "gym2", "gym2 street", -22.00, ConstraintViolationException.class},
 							
 			//Test #08: Introduced invalid logo URL in creation. Expected false.
-			{"manager1", 40, "logo", "gym", "gym street", 22.00,
-					"https://i.ytimg.com/vi/iWm0beJM6Bk/maxresdefault.jpg", "gym2", "gym2 street", 1000.00, IllegalArgumentException.class},
+			{"manager1", "logo", "gym", "gym street", 22.00,
+					"https://i.ytimg.com/vi/iWm0beJM6Bk/maxresdefault.jpg", "gym2", "gym2 street", 1000.00, ConstraintViolationException.class},
 				
 			//Test #09 Introduced invalid logo URL in editing. Expected false.
-			{"manager1", 40, "https://i.ytimg.com/vi/iWm0beJM6Bk/maxresdefault.jpg", "gym", "gym street", 22.00,
-				"logo", "gym2", "gym2 street", 1000.00, IllegalArgumentException.class},
+			{"manager1", "https://i.ytimg.com/vi/iWm0beJM6Bk/maxresdefault.jpg", "gym", "gym street", 22.00,
+				"logo", "gym2", "gym2 street", 1000.00, ConstraintViolationException.class},
 								
 			//Test #10: Introduced HTML code in name field on creation. Expected false.
-			{"manager1", 40, "https://i.ytimg.com/vi/iWm0beJM6Bk/maxresdefault.jpg", "<!DOCTYPE html><html><body><h1>This is heading 1</h1></body></html>", "gym street", 22.00,
-				"https://i.ytimg.com/vi/iWm0beJM6Bk/maxresdefault.jpg", "gym2", "gym2 street", 1000.00, IllegalArgumentException.class},
+			{"manager1", "https://i.ytimg.com/vi/iWm0beJM6Bk/maxresdefault.jpg", "<!DOCTYPE html><html><body><h1>This is heading 1</h1></body></html>", "gym street", 22.00,
+				"https://i.ytimg.com/vi/iWm0beJM6Bk/maxresdefault.jpg", "gym2", "gym2 street", 1000.00, ConstraintViolationException.class},
 									
 			//Test #11: Introduced HTML code in address field on edition. Expected false.
-			{"manager1", 40, "https://i.ytimg.com/vi/iWm0beJM6Bk/maxresdefault.jpg", "gym", "gym street", 22.00,
-				"https://i.ytimg.com/vi/iWm0beJM6Bk/maxresdefault.jpg", "gym2", "<!DOCTYPE html><html><body><h1>This is heading 1</h1></body></html>", 1000.00, IllegalArgumentException.class}
+			{"manager1", "https://i.ytimg.com/vi/iWm0beJM6Bk/maxresdefault.jpg", "gym", "gym street", 22.00,
+				"https://i.ytimg.com/vi/iWm0beJM6Bk/maxresdefault.jpg", "gym2", "<!DOCTYPE html><html><body><h1>This is heading 1</h1></body></html>", 1000.00, ConstraintViolationException.class}
 
 		};
 		for (int i = 0; i < testingData.length; i++)
-			this.manageGymTemplate((String) testingData[i][0], (Integer) testingData[i][1], (String) testingData[i][2], (String) testingData[i][3],
-					(String) testingData[i][4], (Double) testingData[i][5], (String) testingData[i][6], (String) testingData[i][7],
-					(String) testingData[i][8], (Double) testingData[i][9], (Class<?>) testingData[i][10]);
+			this.manageGymTemplate((String) testingData[i][0], (String) testingData[i][1], (String) testingData[i][2],
+					(String) testingData[i][3], (Double) testingData[i][4], (String) testingData[i][5], (String) testingData[i][6],
+					(String) testingData[i][7], (Double) testingData[i][8], (Class<?>) testingData[i][9]);
 	}
 	
 	@Test
@@ -241,7 +244,7 @@ public class GymServiceTest extends AbstractTest {
 			{"manager1", 44, 43, IllegalArgumentException.class},
 			
 			//Test #03: Access by authorized user to non existing gym. Expected false.
-			{"customer1", 44, 103, IllegalArgumentException.class}
+			{"customer1", 44, 103, NullPointerException.class}
 
 		};
 		for (int i = 0; i < testingData.length; i++)

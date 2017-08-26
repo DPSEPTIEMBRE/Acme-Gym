@@ -41,6 +41,7 @@ public class TabuServiceTest extends AbstractTest {
 			this.authenticate(username);
 			
 			//List
+			Assert.isTrue(username == "admin");
 			tabuService.findAll();
 			
 			//Create
@@ -68,13 +69,13 @@ public class TabuServiceTest extends AbstractTest {
 		final Object testingData[][] = {
 				
 			//Test #01: Listing and creating as administrator. Expected true.
-			{"administrator", "cialis", null},
+			{"admin", "cialis", null},
 			
 			//Test #02: Attempting access as anonymous user. Expected false.
 			{null, "cialis", IllegalArgumentException.class},
 			
 			//Test #03: Creating a null word. Expected false.
-			{"administrator", null, IllegalArgumentException.class}
+			{"admin", null, IllegalArgumentException.class}
 
 		};
 		for (int i = 0; i < testingData.length; i++)

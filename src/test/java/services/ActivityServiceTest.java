@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.transaction.Transactional;
-import javax.validation.ConstraintViolationException;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -157,7 +156,7 @@ public class ActivityServiceTest extends AbstractTest {
 			this.authenticate(username);
 			
 			//Joining
-			Assert.isTrue(username == "customer" || username == "customer2");
+			Assert.isTrue(username == "customer1" || username == "customer2");
 			Customer c = (Customer) loginService.findActorByUserName(customerID);
 			Activity a = activityService.findOne(activityID);
 			List<Customer> list = a.getCustomers();
@@ -191,7 +190,7 @@ public class ActivityServiceTest extends AbstractTest {
 			{null, 78, NullPointerException.class},
 
 			//Test #03: Access by authorized user to non existing activity. Expected false.
-			{"administrator", 78, NullPointerException.class}
+			{"admin", 78, NullPointerException.class}
 
 		};
 		for (int i = 0; i < testingData.length; i++)
@@ -210,7 +209,7 @@ public class ActivityServiceTest extends AbstractTest {
 			{null, 184, IllegalArgumentException.class},
 
 			//Test #03: Access by authorized user to non existing activity. Expected false.
-			{"administrator", 84, IllegalArgumentException.class}
+			{"admin", 84, IllegalArgumentException.class}
 
 		};
 		for (int i = 0; i < testingData.length; i++)
@@ -247,7 +246,7 @@ public class ActivityServiceTest extends AbstractTest {
 		final Object testingData[][] = {
 				
 			//Test #01: Access by customer. Expected true.
-			{"customer", 44, 48, null},
+			{"customer1", 44, 48, null},
 			
 			//Test #02: Access by anonymous user. Expected false.
 			{null, 44, 48, IllegalArgumentException.class},

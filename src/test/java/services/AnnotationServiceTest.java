@@ -7,6 +7,7 @@ import javax.transaction.Transactional;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.InvalidDataAccessApiUsageException;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.transaction.TransactionConfiguration;
@@ -14,7 +15,6 @@ import org.springframework.util.Assert;
 
 import utilities.AbstractTest;
 import domain.Annotation;
-import domain.Customer;
 import domain.Gym;
 
 @Transactional
@@ -68,6 +68,7 @@ public class AnnotationServiceTest extends AbstractTest {
 		try {
 			this.authenticate(username);
 			
+			Assert.isTrue(username != null);
 			Annotation res = annotationService.create();
 
 			if(moment != null){
@@ -106,6 +107,7 @@ public class AnnotationServiceTest extends AbstractTest {
 		try {
 			this.authenticate(username);
 			
+			Assert.isTrue(username == "admin");
 			Annotation a = annotationService.findOne(annotationID);
 			annotationService.delete(a);
 			
@@ -131,10 +133,10 @@ public class AnnotationServiceTest extends AbstractTest {
 			{42, 48, null},
 			
 			//Test #02: Attempt to access a nonexistent gym. Expected false.
-			{142, 48, IllegalArgumentException.class},
+			{null, 48, NullPointerException.class},
 			
-			//Test #03: Attempt to access a nonexisten activity. Expected false.
-			{42, 148, IllegalArgumentException.class}
+			//Test #03: Attempt to access a nonexistent activity. Expected false.
+			{42, null, NullPointerException.class}
 
 		};
 		for (int i = 0; i < testingData.length; i++)
@@ -153,7 +155,7 @@ public class AnnotationServiceTest extends AbstractTest {
 			{null, 42, "10-10-2017 20:00", "annotation", 2, IllegalArgumentException.class},
 			
 			//Test #03: Rating doesn't conform to the established limits. Expected false.
-			{"trainer1", 42, "10-10-2017 20:00", "annotation", 10, IllegalArgumentException.class}
+			{"trainer1", 42, "10-10-2017 20:00", "annotation", 10, InvalidDataAccessApiUsageException.class}
 
 		};
 		for (int i = 0; i < testingData.length; i++)
@@ -167,13 +169,13 @@ public class AnnotationServiceTest extends AbstractTest {
 		final Object testingData[][] = {
 				
 			//Test #01: Authorized deletion. Expected true.
-			{"administrator", 50, null},
+			{"admin", 50, null},
 			
 			//Test #02: Unauthorized deletion. Expected false.
 			{"customer2", 50, IllegalArgumentException.class},
 			
 			//Test #03: Attempt to delete a nonexistent annotation. Expected false.
-			{"administrator", 150, IllegalArgumentException.class}
+			{"admin", 150, IllegalArgumentException.class}
 
 		};
 		for (int i = 0; i < testingData.length; i++)

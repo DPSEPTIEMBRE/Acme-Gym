@@ -44,7 +44,8 @@ public class TrainerServiceTest extends AbstractTest {
 	//Templates
 
 	/*
-	 * 6.3: List the trainers that are registered in the system and search for them using a single key word that must be contained in their names or surnames
+	 * 6.3: A manager must be able to list the trainers that are registered in the system 
+	 * 		and search for them using a single key word that must be contained in their names or surnames.
 	 * 
 	 */
 	public void trainerListSearchTemplate(final String username, final Integer trainerID, final Class<?> expected){
@@ -53,6 +54,7 @@ public class TrainerServiceTest extends AbstractTest {
 		try{
 			this.authenticate(username);
 			
+			Assert.isTrue(username == "manager1" || username == "manager2");
 			trainerService.findAll();
 			trainerService.findOne(trainerID);
 			
@@ -77,6 +79,7 @@ public class TrainerServiceTest extends AbstractTest {
 		try {
 			this.authenticate(username);
 			
+			Assert.isTrue(username == "manager1" || username == "manager2");
 			Trainer res = trainerService.create();
 
 			Assert.notNull(newUsername);
@@ -115,13 +118,15 @@ public class TrainerServiceTest extends AbstractTest {
 	 * 6.5: Associate a trainer with one of the manager's gyms.
 	 * 
 	 */
-	public void trainerAssociationToGymTemplate(final String username, final Integer trainerID, final Integer gymID, final Class<?> expected) {
+	public void trainerAssociationToGymTemplate(final String username, final Integer gymID, final Class<?> expected) {
 		Class<?> caught = null;
 
 		try {
 			this.authenticate(username);
 			
-			Trainer t = (Trainer) loginService.findActorByUserName(trainerID);
+			Assert.isTrue(username == "manager1" || username == "manager2");
+			Assert.notNull(gymID);
+			Trainer t = trainerService.create();
 			Gym g = gymService.findOne(gymID);
 			List<Trainer> list = g.getTrainers();
 			list.add(t);
@@ -141,13 +146,15 @@ public class TrainerServiceTest extends AbstractTest {
 	 * 6.6: Associate a trainer with an activity in one of the manager's gyms.
 	 * 
 	 */
-	public void trainerAssociationToActivityTemplate(final String username, final Integer trainerID, final Integer activityID, final Class<?> expected) {
+	public void trainerAssociationToActivityTemplate(final String username, final Integer activityID, final Class<?> expected) {
 		Class<?> caught = null;
 
 		try {
 			this.authenticate(username);
 			
-			Trainer t = (Trainer) loginService.findActorByUserName(trainerID);
+			Assert.isTrue(username == "manager1" || username == "manager2");
+			Assert.notNull(activityID);
+			Trainer t = trainerService.create();
 			Activity a = activityService.findOne(activityID);
 			List<Trainer> list = a.getTrainers();
 			list.add(t);
@@ -177,7 +184,7 @@ public class TrainerServiceTest extends AbstractTest {
 				{null, 46, IllegalArgumentException.class},
 				
 				//Test #03: Accessing a non existing trainer. Expected false.
-				{"manager1", 90, NullPointerException.class},
+				{"manager1", null, IllegalArgumentException.class},
 
 		};
 		for (int i = 0; i < testingData.length; i++)
@@ -190,13 +197,13 @@ public class TrainerServiceTest extends AbstractTest {
 		final Object testingData[][] = {
 				
 			//Test #01: All parameters correct. Expected true.
-			{"manager1", "trainerTest", "trainerTest", "actorName", "surname", "city", "country", "trainer@mail.com", "+34 (29) 1259", "address", null},
+			{"manager1", "trainerTest", "trainerTest", "actorName", "surname", "+34 (29) 1259", "trainer@mail.com", "address", "city", "country", null},
 			
 			//Test #02: All fields empty. Expected false.
-			{null, null, null, null, null, null, null, null, null, IllegalArgumentException.class},
+			{null, null, null, null, null, null, null, null, null, null, IllegalArgumentException.class},
 			
 			//Test #03: Phone number doesn't match pattern. Expected false.
-			{"manager1", "trainerTest", "trainerTest", "actorName", "surname", "city", "country", "trainer@mail.com", "6824560", "address", IllegalArgumentException.class}
+			{"manager1", "trainerTest", "trainerTest", "actorName", "surname", "6824560", "trainer@mail.com", "address", "city", "country", IllegalArgumentException.class}
 
 		};
 		for (int i = 0; i < testingData.length; i++)
@@ -210,17 +217,17 @@ public class TrainerServiceTest extends AbstractTest {
 		final Object testingData[][] = {
 				
 			//Test #01: All parameters correct. Expected true.
-			{"manager1", 47, 42, null},
+			{"manager1", 42, null},
 			
 			//Test #02: Access attempt by unauthorized user. Expected false.
-			{"trainer1", 47, 42, IllegalArgumentException.class},
+			{"trainer1", 42, IllegalArgumentException.class},
 			
 			//Test #03: Attempt to associate to a nonexistent gym. Expected false.
-			{"manager1", 47, 42, IllegalArgumentException.class},
+			{"manager1", null, IllegalArgumentException.class},
 			
 		};
 		for (int i = 0; i < testingData.length; i++)
-			this.trainerAssociationToGymTemplate((String) testingData[i][0], (Integer) testingData[i][1], (Integer) testingData[i][2], (Class<?>) testingData[i][3]);
+			this.trainerAssociationToGymTemplate((String) testingData[i][0], (Integer) testingData[i][1], (Class<?>) testingData[i][2]);
 	}
 	
 	@Test
@@ -229,17 +236,17 @@ public class TrainerServiceTest extends AbstractTest {
 		final Object testingData[][] = {
 				
 			//Test #01: All parameters correct. Expected true.
-			{"manager1", 46, 48, null},
+			{"manager1", 48, null},
 			
 			//Test #02: Access attempt by anonymous user. Expected false.
-			{null, 46, 48, IllegalArgumentException.class},
+			{null, 48, IllegalArgumentException.class},
 			
-			//Test #03: Attempt to associate to an activity that doesn't belong to the manager. Expected false.
-			{"manager1", 46, 49, IllegalArgumentException.class},
+			//Test #03: Attempt to associate to an activity that doesn't exist. Expected false.
+			{"manager1", null, IllegalArgumentException.class},
 			
 		};
 		for (int i = 0; i < testingData.length; i++)
-			this.trainerAssociationToGymTemplate((String) testingData[i][0], (Integer) testingData[i][1], (Integer) testingData[i][2], (Class<?>) testingData[i][3]);
+			this.trainerAssociationToActivityTemplate((String) testingData[i][0], (Integer) testingData[i][1], (Class<?>) testingData[i][2]);
 	}
 
 }
