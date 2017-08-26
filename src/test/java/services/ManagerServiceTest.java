@@ -78,17 +78,22 @@ public class ManagerServiceTest extends AbstractTest {
 	/*
 	 * 5.2: An actor who is authenticated must be able to edit personal data. 
 	 */
-	public void managerEditTemplate(final String username, String actorName, String surname, String city, String country, String email, String phone, String postalAddress, final Class<?> expected) {
+	public void managerEditTemplate(final String username, final Integer id, String actorName, String surname, String city, String country, String email, String phone, String postalAddress, final Class<?> expected) {
 		Class<?> caught = null;
 
 		try {
 			this.authenticate(username);
 			
 			Assert.isTrue(username != null);
-			Manager m = managerService.create();
+			Manager m = managerService.findOne(id);
 			
-			m.getUserAccount().setUsername("manager9");
-			m.getUserAccount().setPassword("manager9pass");
+			if(phone != null){
+				Assert.isTrue(phone.matches("(\\+\\d{2} \\(\\d{1,3}\\) \\d{4,})|(\\+\\d{2} \\d{4,})"));
+			}
+			Assert.notNull(email);
+			Assert.notNull(actorName);
+			Assert.notNull(surname);
+
 			m.setActorName(actorName);
 			m.setSurname(surname);
 			m.setCity(city);
@@ -96,13 +101,6 @@ public class ManagerServiceTest extends AbstractTest {
 			m.setEmail(email);
 			m.setPhone(phone);
 			m.setPostalAddress(postalAddress);
-
-			if(phone != null){
-				Assert.isTrue(phone.matches("(\\+\\d{2} \\(\\d{1,3}\\) \\d{4,})|(\\+\\d{2} \\d{4,})"));
-			}
-			Assert.notNull(email);
-			Assert.notNull(actorName);
-			Assert.notNull(surname);
 			
 			managerService.save(m);
 			
@@ -170,18 +168,18 @@ public class ManagerServiceTest extends AbstractTest {
 		final Object testingData[][] = {
 				
 			//Test #01: All parameters correct. Expected true.
-			{"manager1", "actorName1", "surname1", "city1", "country1", "manager1@mail.com", "+35 (29) 1259", "address1", null},
+			{"manager1", 40, "actorName1", "surname1", "city1", "country1", "manager1@mail.com", "+35 (29) 1259", "address1", null},
 			
 			//Test #02: All fields empty. Expected false.
-			{"manager1", null, null, null, null, null, null, null, IllegalArgumentException.class},
+			{"manager1", 40, null, null, null, null, null, null, null, IllegalArgumentException.class},
 			
 			//Test #03: Phone number doesn't match pattern. Expected false.
-			{"manager1", "actorName", "surname", "city", "country", "manager@mail.com", "6824560", "address", IllegalArgumentException.class}
+			{"manager1", 40, "actorName", "surname", "city", "country", "manager@mail.com", "6824560", "address", IllegalArgumentException.class}
 
 		};
 		for (int i = 0; i < testingData.length; i++)
-			this.managerEditTemplate((String) testingData[i][0], (String) testingData[i][1], (String) testingData[i][2], (String) testingData[i][3], (String) testingData[i][4], (String) testingData[i][5],
-				(String) testingData[i][6], (String) testingData[i][7], (Class<?>) testingData[i][8]);
+			this.managerEditTemplate((String) testingData[i][0], (Integer) testingData[i][1], (String) testingData[i][2], (String) testingData[i][3], (String) testingData[i][4],
+					(String) testingData[i][5], (String) testingData[i][6], (String) testingData[i][7], (String) testingData[i][8], (Class<?>) testingData[i][9]);
 	}
 	
 	@Test
