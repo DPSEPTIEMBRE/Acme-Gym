@@ -1,4 +1,4 @@
-﻿start transaction
+﻿start transaction;
 
 drop database if exists `Acme-Gym`;
 create database `Acme-Gym`;
