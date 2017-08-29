@@ -12,7 +12,6 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.transaction.TransactionConfiguration;
 import org.springframework.util.Assert;
 
-import security.LoginService;
 import utilities.AbstractTest;
 import domain.Activity;
 import domain.Gym;
@@ -30,9 +29,6 @@ public class TrainerServiceTest extends AbstractTest {
 
 	@Autowired
 	private TrainerService	trainerService;
-	
-	@Autowired
-	private LoginService loginService;
 	
 	@Autowired
 	private GymService gymService;
