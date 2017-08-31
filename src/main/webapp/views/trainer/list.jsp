@@ -17,16 +17,15 @@
 <%@taglib prefix="display" uri="http://displaytag.sf.net"%>
 <%@taglib prefix="acme" tagdir="/WEB-INF/tags"%>
 
-<label><spring:message code="trainer.text" /> </label>
-<input type="text" id="trainerSearch" /> 
-<button type="button" class="btn btn-primary" >  <spring:message code="trainer.search" /></button>
+<input type="text" id="textSearch" /> 
+<button type="button" class="btn btn-primary" >  <spring:message code="activity.search" /></button>
 
 <security:authorize access="hasRole('MANAGER')"> 
 
 <jstl:if test="${a==1}">
 
 <acme:list list="${trainers}" requestURI="trainer/list.do" hidden_fields="userAccount,annotationWriter,id,version" 
-extraColumns="{addToGym: manager/trainer/addToGym.do, newAnnotation: annotation/create.do}" 
+extraColumns="{addToGym: manageractor/trainer/addToGym.do, newAnnotation: annotation/create.do, avgStar: trainer/avgStar.do}" 
 entityUrl="{annotationStore: annotation/listByTrainer.do}"/>
 
 </jstl:if>
@@ -34,7 +33,7 @@ entityUrl="{annotationStore: annotation/listByTrainer.do}"/>
 <jstl:if test="${a==2}">
 
 <acme:list list="${trainers}" requestURI="trainer/list.do" hidden_fields="userAccount,annotationWriter,id,version" 
-extraColumns="{addToGym: activity/addToActivity.do, newAnnotation: annotation/create.do}" 
+extraColumns="{addToGym: activity/addToActivity.do, newAnnotation: annotation/create.do, avgStar: trainer/avgStar.do}" 
 entityUrl="{annotationStore: annotation/listByTrainer.do}"/>
 
 </jstl:if>
@@ -42,35 +41,49 @@ entityUrl="{annotationStore: annotation/listByTrainer.do}"/>
 <jstl:if test="${a!=1 && a!=2}">
 
 <acme:list list="${trainers}" requestURI="trainer/list.do" hidden_fields="userAccount,annotationWriter,id,version"
-entityUrl="{annotationStore: annotation/listByTrainer.do}" extraColumns="{newAnnotation: annotation/create.do}"/>
+entityUrl="{annotationStore: annotation/listByTrainer.do}" extraColumns="{newAnnotation: annotation/create.do, avgStar: trainer/avgStar.do}"/>
 
 </jstl:if>
 
 </security:authorize>
 
-<security:authorize access="permitAll() and !hasRole('MANAGER')"> 
+<security:authorize access="permitAll() and !hasRole('MANAGER') and !hasRole('TRAINER')"> 
 
 <acme:list list="${trainers}" requestURI="trainer/list.do" hidden_fields="userAccount,annotationWriter,id,version"
-entityUrl="{annotationStore: annotation/listByTrainer.do}" />
+entityUrl="{annotationStore: annotation/listByTrainer.do}" 
+extraColumns="{avgStar: trainer/avgStar.do}"/>
 
 
 </security:authorize>
+
+
+<security:authorize access="hasRole('TRAINER')"> 
+
+<acme:list list="${trainers}" requestURI="trainer/list.do" hidden_fields="userAccount,annotationWriter,id,version"
+entityUrl="{annotationStore: annotation/listByTrainer.do}" 
+extraColumns="{newAnnotation: annotation/create.do, avgStar: trainer/avgStar.do}"/>
+
+
+</security:authorize>
+
+
+
 
 <script>
 $(document).ready(function(){
     $("button").click(function(){
         $.ajax({success: function(result){
-        	var input, filter, table, tr, tdName,tdSurname,i;
-        	input = document.getElementById("trainerSearch");
-        	filter = input.value.toUpperCase();
+        	var input, filter, table, tr, tdTitle,tdDescription;
+        	input = document.getElementById("textSearch");;
+        	filter1 = input.value.toUpperCase();
         	table = document.getElementById("row");
         	tr = table.getElementsByTagName("tr");
         	for (i = 0; i < tr.length; i++) {
-        		tdName = tr[i].getElementsByTagName("td")[0];
-        		tdSurname = tr[i].getElementsByTagName("td")[1];
-        		if (tdName || tdSurname) {
-        			if ((tdName.innerHTML.toUpperCase().indexOf(filter) > -1 || 
-        				tdSurname.innerHTML.toUpperCase().indexOf(filter) > -1)){
+        		tdTitle = tr[i].getElementsByTagName("td")[0];
+        		tdDescription = tr[i].getElementsByTagName("td")[1];
+        		if (tdTitle || tdDescription ) {
+        			if (tdTitle.innerHTML.toUpperCase().indexOf(filter1) > -1 || 
+        				tdDescription.innerHTML.toUpperCase().indexOf(filter1) > -1) {
 	          	        tr[i].style.display = "";
 	          	      } else {
 	          	        tr[i].style.display = "none";

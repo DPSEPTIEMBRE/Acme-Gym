@@ -19,7 +19,7 @@ import services.ManagerService;
 import services.TrainerService;
 
 @Controller
-@RequestMapping("/manager")
+@RequestMapping("/manageractor")
 public class ManagerController extends AbstractController{
 
 	private static Integer actual=null;
@@ -49,6 +49,16 @@ public class ManagerController extends AbstractController{
 
 	//Actions
 
+	@RequestMapping("/avgStar")
+	public ModelAndView avgStar(@RequestParam Manager q) {
+		ModelAndView result;
+
+		result = new ModelAndView("manager/avgStar");
+		
+		result.addObject("avgStar", managerService.avgStar(q));
+
+		return result;
+	}
 	
 	@RequestMapping("/gym/list")
 	public ModelAndView listGyms(@RequestParam Integer q,@RequestParam Integer a) {

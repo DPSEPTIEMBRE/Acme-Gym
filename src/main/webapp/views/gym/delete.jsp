@@ -24,7 +24,7 @@
 <spring:message code="gym.erase" var="gymSaveHeader"/>
 <spring:message code="gym.cancel" var="gymCancelHeader"/>
 <input onclick="window.location='gym/delete-delete.do?q=${gym}';" class="btn btn-primary" name="save" value="${gymSaveHeader}" />
-<input onclick="window.location='welcome/index.do';" class="btn btn-warning" type="button" name="cancel" value="${gymCancelHeader}"/>
+<input onclick="window.history.back()" class="btn btn-warning" type="button" name="cancel" value="${gymCancelHeader}"/>
 		
 
 

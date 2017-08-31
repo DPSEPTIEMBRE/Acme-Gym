@@ -135,7 +135,7 @@
 
 
 
-	<bean id="admin" class="domain.Administrator">
+	<bean id="administrator" class="domain.Administrator">
 		<property name="actorName" value="Pablo" />
 		<property name="surname" value="Pablito" />
 		<property name="email" value="pablo@hotmail.com" />
@@ -495,7 +495,7 @@
 		<property name="momentWritten" value="30-07-2017 20:20" />
 		<property name="text" value="be careful with your annotations or ban" />
 		<property name="rate" value="0" />
-		<property name="actorWrites" ref="admin" />
+		<property name="actorWrites" ref="administrator" />
 		<property name="actorStores" ref="trainer2" />
 	</bean>
 

@@ -37,7 +37,7 @@ public class ActivityService {
 	
 	public Activity create() {
 		Activity act= new Activity();
-
+		
 		act.setAnnotations(new ArrayList<Annotation>());
 		act.setCustomers(new ArrayList<Customer>());
 		act.setDayWeek(new Integer(1));
@@ -149,6 +149,20 @@ public class ActivityService {
 	public Double avgStarsByActivity(int activity_id) {
 		Assert.notNull(activity_id);
 		return activityRepository.avgStarsByActivity(activity_id);
+	}
+
+	public Double avgStar(Activity a) {
+		Double res = 0.0;
+		Integer up=0;
+		Integer total=a.getAnnotations().size();
+		
+		for(Annotation an : a.getAnnotations()) {
+			up= up + an.getRate();
+		}
+		
+		res=new Double(up/total);
+		
+		return res;
 	}
 	
 	

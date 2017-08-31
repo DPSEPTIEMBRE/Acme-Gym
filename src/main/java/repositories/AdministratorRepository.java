@@ -10,12 +10,12 @@ import domain.Administrator;
 public interface AdministratorRepository extends JpaRepository<Administrator, Integer> {
 
 	//La media y desviación estándar del número de notas asociadas a administradores
-	@Query("select avg(c.annotationStore.size + c.annotationWriter.size) from Administrator c")
+	@Query("select avg(c.annotationStore.size + c.annotationWriter.size),stddev(c.annotationStore.size + c.annotationWriter.size) from Administrator c")
 	Object[] avgDesviationNotesByAdministrators();
 
 
 	//La media y desviación estándar del número de estrellas por administradores
-	@Query("select avg(s.rate) from Administrator c join c.annotationStore s")
+	@Query("select avg(s.rate),stddev(s.rate) from Administrator c join c.annotationStore s")
 	Object[] avgDesviationStarsByAdministrators();
 
 	//La media de estrellas por administrador, agrupadas por país

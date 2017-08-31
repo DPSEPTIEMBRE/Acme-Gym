@@ -14,11 +14,11 @@ import domain.Manager;
 public interface ManagerRepository extends JpaRepository<Manager, Integer> {
 
 	//La media y desviación estándar del número de notas asociadas a managers
-	@Query("select avg(c.annotationStore.size + c.annotationWriter.size) from Manager c")
+	@Query("select avg(c.annotationStore.size + c.annotationWriter.size),stddev(c.annotationStore.size + c.annotationWriter.size) from Manager c")
 	Object[] avgDesviationNotesByManagers();
 
 	//La media y desviación estándar del número de estrellas por managers
-	@Query("select avg(s.rate) from Manager c join c.annotationStore s")
+	@Query("select avg(s.rate),stddev(s.rate) from Manager c join c.annotationStore s")
 	Object[] avgDesviationStarsByManagers();
 
 	//La media de estrellas por manager, agrupadas por país
@@ -34,7 +34,7 @@ public interface ManagerRepository extends JpaRepository<Manager, Integer> {
 	List<Gym> gymsByManager(int manager_id);
 
 	//El mínimo, máximo, media y desviación estándar del número de gimnasios por mánager
-	@Query("select min(c.gyms.size), max(c.gyms.size), avg(c.gyms.size) from Manager c")
+	@Query("select min(c.gyms.size), max(c.gyms.size), avg(c.gyms.size),stddev(c.gyms.size) from Manager c")
 	Object[] minMaxAvgDesviationGymsByManagers();
 
 	//Anotaciones por manager

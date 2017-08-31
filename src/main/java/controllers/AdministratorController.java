@@ -76,7 +76,7 @@ public class AdministratorController extends AbstractController {
 	}
 	
 	
-	@RequestMapping("/manager/list")
+	@RequestMapping("/manageractor/list")
 	public ModelAndView managers(@RequestParam Integer a) {
 		ModelAndView result;
 
@@ -107,7 +107,7 @@ public class AdministratorController extends AbstractController {
 		return result;
 	}
 	
-	@RequestMapping("/manager/remove")
+	@RequestMapping("/manageractor/remove")
 	public ModelAndView removeManager(@RequestParam Integer q) {
 		ModelAndView result;
 
@@ -137,7 +137,7 @@ public class AdministratorController extends AbstractController {
 		return result;
 	}
 	
-	@RequestMapping("/manager/admit")
+	@RequestMapping("/manageractor/admit")
 	public ModelAndView admitManager(@RequestParam Integer q) {
 		ModelAndView result;
 
@@ -212,22 +212,22 @@ public class AdministratorController extends AbstractController {
 		Object[] a74 = managerService.avgDesviationStarsByManagers();
 		Object[] a75 = gymService.avgDesviationStarsByGym();
 		
-		result.addObject("a1", a1[0] + " | " + a1[1] + " | " + a1[2]);
-		result.addObject("a2", a2[0] + " | " + a2[1] + " | " + a2[2]);
-		result.addObject("a3", a3[0] + " | " + a3[1] + " | " + a3[2]);
+		result.addObject("a1", a1[0] + " | " + a1[1] + " | " + a1[2] + " | " + a1[3]);
+		result.addObject("a2", a2[0] + " | " + a2[1] + " | " + a2[2] + " | " + a2[3]);
+		result.addObject("a3", a3[0] + " | " + a3[1] + " | " + a3[2] + " | " + a3[3]);
 		result.addObject("a4", a4);
 		result.addObject("a5", a5);
-		result.addObject("a6", a61[0] + " | " + 
-							   a62[0] + " | " +
-							   a63[0] +" | " +
-							   a64[0] +" | " +
-							   a65[0]);
+		result.addObject("a6", a61[0] + ", " + a61[1] + " | " + 
+							   a62[0] + ", " + a62[1] + " | " +
+							   a63[0] + ", " + a63[1] +" | " +
+							   a64[0] + ", " + a64[1] +" | " +
+							   a65[0] + ", " + a65[1]);
 		
-		result.addObject("a7", a71[0] + " | " + 
-				   			   a72[0] + " | " +
-				   			   a73[0] +" | " +
-				   			   a74[0] +" | " +
-				   			   a75[0]);
+		result.addObject("a7", a71[0] +  ", " + a71[1] + " | " + 
+				   			   a72[0] +  ", " + a72[1] + " | " +
+				   			   a73[0] +  ", " + a73[1] +" | " +
+				   			   a74[0] +  ", " + a74[1] +" | " +
+				   			   a75[0] +  ", " + a75[1]);
 		
 		result.addObject("a8", administratorService.avgStarsCityByAdministrators() + " | " + 
 	   			  customerService.avgStarsCityByCustomers() + " | " +

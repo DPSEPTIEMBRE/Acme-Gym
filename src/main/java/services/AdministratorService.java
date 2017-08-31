@@ -95,7 +95,6 @@ public class AdministratorService {
 			admin.setSurname(administrator.getSurname());
 			admin.setAnnotationStore(administrator.getAnnotationStore());
 			admin.setAnnotationWriter(administrator.getAnnotationWriter());
-			admin.setUserAccount(administrator.getUserAccount());
 			admin = administratorRepository.save(admin);
 		}else{
 			admin = administratorRepository.save(administrator);
@@ -108,15 +107,21 @@ public class AdministratorService {
 
 	public Object[] avgDesviationStarsByAdministrators() {
 		 Object[] res = administratorRepository.avgDesviationStarsByAdministrators();
-		 if(res==null) {
-			 Object[] aux = {0.0,0.0};
-			 res=aux;
+		 if(res[1]==null) {
+			 res[1]=0.0;
+		 } 
+		 if(res[0]==null) {
+			 res[0]=0.0;
 		 }
 		return res;
 	}
 
 	public Object[] avgDesviationNotesByAdministrators() {
-		return administratorRepository.avgDesviationNotesByAdministrators();
+		Object[] a = administratorRepository.avgDesviationNotesByAdministrators();
+		if(a[1]==null) {
+			a[1]=0.0;
+		}
+		return a;
 	}
 
 	public Double avgStarsCountryByAdministrators() {

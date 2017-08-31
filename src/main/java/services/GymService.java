@@ -116,9 +116,7 @@ public class GymService {
 			gym.setName(arg0.getName());
 			gym.setTrainers(arg0.getTrainers());
 			gym.setIsDelete(arg0.getIsDelete());
-			System.out.println("VA BIEN");
 			gym = gymRepository.save(gym);
-			System.out.println("TODO OK");
 			
 		}else{
 			gym= gymRepository.save(arg0);
@@ -160,11 +158,19 @@ public class GymService {
 	}
 
 	public Object[] minMaxAvgDesviationCustomersForGym() {
-		return gymRepository.minMaxAvgDesviationCustomersForGym();
+		Object[] res = gymRepository.minMaxAvgDesviationCustomersForGym();
+		 if(res[3]==null) {
+			 res[3]=0.0;
+		 }
+		return res;
 	}
 
 	public Object[] avgDesviationNotesByGym() {
-		return gymRepository.avgDesviationNotesByGym();
+		Object[] res = gymRepository.avgDesviationNotesByGym();
+		 if(res[1]==null) {
+			 res[1]=0.0;
+		 }
+		return res;
 	}
 
 	public List<Annotation> annotationsByActivity(int activity_id) {
@@ -173,9 +179,8 @@ public class GymService {
 
 	public Object[] avgDesviationStarsByGym() {
 		Object[] res = gymRepository.avgDesviationStarsByGym();
-		 if(res==null) {
-			 Object[] aux = {0.0,0.0};
-			 res=aux;
+		 if(res[1]==null) {
+			 res[1]=0.0;
 		 }
 		return res;
 	}
@@ -183,6 +188,20 @@ public class GymService {
 	public Double avgStarsByActivity(int activity_id) {
 		Assert.notNull(activity_id);
 		return activityService.avgStarsByActivity(activity_id);
+	}
+
+	public Double avgStar(Gym a) {
+		Double res = 0.0;
+		Integer up=0;
+		Integer total=a.getAnnotations().size();
+		
+		for(Annotation an : a.getAnnotations()) {
+			up= up + an.getRate();
+		}
+		
+		res=new Double(up/total);
+		
+		return res;
 	}
 
 

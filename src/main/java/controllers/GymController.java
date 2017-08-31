@@ -45,6 +45,17 @@ public class GymController extends AbstractController{
 
 	//Actions
 
+	@RequestMapping("/avgStar")
+	public ModelAndView avgStar(@RequestParam Gym q) {
+		ModelAndView result;
+
+		result = new ModelAndView("gym/avgStar");
+		
+		result.addObject("avgStar", gymService.avgStar(q));
+
+		return result;
+	}
+	
 	@RequestMapping("/list")
 	public ModelAndView list(@RequestParam Integer a,@RequestParam(required=false) Integer userAccountID) {
 		ModelAndView result;
@@ -64,10 +75,12 @@ public class GymController extends AbstractController{
 
 		}
 
+
+
 		result = new ModelAndView("gym/list");
 		result.addObject("gyms", gyms);
 		result.addObject("a", a);
-		
+
 		return result;
 	}
 

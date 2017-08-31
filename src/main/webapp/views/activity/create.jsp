@@ -67,7 +67,7 @@
 		</div><br />
 		
 		<label> <spring:message code="activity.numSeats"/> </label><br />
-		<input class="form-control" value="${activity.numSeats}" type="number" name="numSeats"/>
+		<input class="form-control" value="${activity.numSeats}" type="number" min="0" name="numSeats"/>
 		<form:errors cssClass="error" path="numSeats" /> <br />
 	
 		</div>
@@ -75,7 +75,7 @@
 		<spring:message code="activity.save" var="actorSaveHeader"/>
 		<spring:message code="activity.cancel" var="actorCancelHeader"/>
 		<input type="submit" class="btn btn-primary" name="save" value="${actorSaveHeader}" />
-		<input onclick="window.location='welcome/index.do';" class="btn btn-warning" type="button" name="cancel" value="${actorCancelHeader}"/>
+		<input onclick="window.history.back()" class="btn btn-warning" type="button" name="cancel" value="${actorCancelHeader}"/>
 		
 		
 	</form:form>

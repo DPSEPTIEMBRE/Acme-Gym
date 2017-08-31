@@ -50,15 +50,15 @@
 						<li class="dropdown">
 				          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><spring:message code="master.page.manager.gym" /><span class="caret"></span></a>
 				          <ul class="dropdown-menu">
-							<li><a href="manager/gym/list.do?q=${id}&a=2"><spring:message code="master.page.manager.gym.list" /> </a></li>
-							<li><a href="manager/gym/create.do"><spring:message code="master.page.manager.gym.create" /> </a></li>
+							<li><a href="manageractor/gym/list.do?q=${id}&a=2"><spring:message code="master.page.manager.gym.list" /> </a></li>
+							<li><a href="manageractor/gym/create.do"><spring:message code="master.page.manager.gym.create" /> </a></li>
 				          </ul>
 				        </li>
 				        
 				        <li class="dropdown">
 				          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><spring:message code="master.page.manager.trainers" /><span class="caret"></span></a>
 				          <ul class="dropdown-menu">
-							<li><a href="manager/trainer/list.do?q=${id}"><spring:message code="master.page.manager.trainers.list" /> </a></li>
+							<li><a href="manageractor/trainer/list.do?q=${id}"><spring:message code="master.page.manager.trainers.list" /> </a></li>
 							<li><a href="actor/signup.do?q=3"><spring:message code="master.page.manager.trainers.create" /> </a></li>
 				          </ul>
 				        </li>
@@ -77,9 +77,9 @@
 					<li class="dropdown">
 				          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><spring:message code="master.page.administrator.manager" /><span class="caret"></span></a>
 				          <ul class="dropdown-menu">
-				          	<li><a class="fNiv" href="administrator/manager/list.do?a=1"><spring:message code="master.page.administrator.manager1" /> </a></li>
-							<li><a class="fNiv" href="administrator/manager/list.do?a=3"><spring:message code="master.page.administrator.manager2" /> </a></li>
-							<li><a class="fNiv" href="administrator/manager/list.do?a=2"><spring:message code="master.page.administrator.manager3" /> </a></li>
+				          	<li><a class="fNiv" href="administrator/manageractor/list.do?a=1"><spring:message code="master.page.administrator.manager1" /> </a></li>
+							<li><a class="fNiv" href="administrator/manageractor/list.do?a=3"><spring:message code="master.page.administrator.manager2" /> </a></li>
+							<li><a class="fNiv" href="administrator/manageractor/list.do?a=2"><spring:message code="master.page.administrator.manager3" /> </a></li>
 				          </ul>
 				    </li>
 				    <li class="dropdown">

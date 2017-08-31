@@ -15,7 +15,6 @@ import domain.Trainer;
 import repositories.TrainerRepository;
 import security.Authority;
 import security.UserAccount;
-import security.UserAccountRepository;
 
 @Service
 @Transactional
@@ -27,11 +26,6 @@ public class TrainerService {
 	@Autowired
 	private TrainerRepository trainerRepository;
 
-//	@Autowired
-//	private Md5PasswordEncoder encoder;
-
-	@Autowired
-	private UserAccountRepository userAccountRepository;
 
 	//Constructor
 
@@ -55,7 +49,7 @@ public class TrainerService {
 		trainer.setSurname(new String());
 
 		Authority auth = new Authority();
-		auth.setAuthority("CUSTOMER");
+		auth.setAuthority("TRAINER");
 		UserAccount account= new UserAccount();
 		account.setAuthorities(Arrays.asList(auth));
 		account.setUsername(new String());
@@ -105,14 +99,11 @@ public class TrainerService {
 			trai.setPhone(trainer.getPhone());
 			trai.setPostalAddress(trainer.getPostalAddress());
 			trai.setSurname(trainer.getSurname());
-			trai.setUserAccount(trainer.getUserAccount());
 
 			trai = trainerRepository.save(trai);
 		}else{
-			UserAccount account = trainer.getUserAccount();
-			account.setPassword(new Md5PasswordEncoder().encodePassword(account.getPassword(), null));
-			account= userAccountRepository.save(account);
-			trainer.setUserAccount(account);
+			Md5PasswordEncoder encoder = new Md5PasswordEncoder();
+			  trainer.getUserAccount().setPassword(encoder.encodePassword(trainer.getUserAccount().getPassword(), null));
 			trai = trainerRepository.save(trainer);
 		}
 
@@ -124,15 +115,18 @@ public class TrainerService {
 
 	public Object[] avgDesviationStarsByTrainers() {
 		Object[] res = trainerRepository.avgDesviationStarsByTrainers();
-		 if(res==null) {
-			 Object[] aux = {0.0,0.0};
-			 res=aux;
+		 if(res[1]==null) {
+			 res[1]=0.0;
 		 }
 		return res;
 	}
 
 	public Object[] avgDesviationNotesByTrainers() {
-		return trainerRepository.avgDesviationNotesByTrainers();
+		Object[] res = trainerRepository.avgDesviationNotesByTrainers();
+		if(res[1]==null) {
+			res[1]=0.0;
+		}
+		return res;
 	}
 
 	public Double avgStarsCountryByTrainers() {
@@ -158,6 +152,23 @@ public class TrainerService {
 	public Double avgStarsByTrainer(int trainer_id) {
 		Assert.notNull(trainer_id);
 		return trainerRepository.avgStarsByTrainer(trainer_id);
+	}
+
+	public Double avgStar(Trainer a) {
+		Double res = 0.0;
+		Integer up=0;
+		Integer total=a.getAnnotationStore().size() + a.getAnnotationWriter().size();
+		
+		for(Annotation an : a.getAnnotationStore()) {
+			up= up + an.getRate();
+		}
+		for(Annotation an : a.getAnnotationWriter()) {
+			up= up + an.getRate();
+		}
+		
+		res=new Double(up/total);
+		
+		return res;
 	}
 
 

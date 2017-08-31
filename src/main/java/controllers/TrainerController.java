@@ -33,6 +33,17 @@ public class TrainerController {
 
 	//Actions
 
+	@RequestMapping("/avgStar")
+	public ModelAndView avgStar(@RequestParam Trainer q) {
+		ModelAndView result;
+
+		result = new ModelAndView("trainer/avgStar");
+		
+		result.addObject("avgStar", trainerService.avgStar(q));
+
+		return result;
+	}
+	
 	@RequestMapping("/listByActivity.do")
 	public ModelAndView list(@RequestParam Integer q) {
 		ModelAndView result;

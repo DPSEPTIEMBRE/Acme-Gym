@@ -17,12 +17,13 @@
 <%@taglib prefix="display" uri="http://displaytag.sf.net"%>
 <%@taglib prefix="acme" tagdir="/WEB-INF/tags"%>
 
-<security:authorize access="permitAll() and !hasRole('MANAGER') and !hasRole('CUSTOMER') and !hasRole('ADMINISTRATOR')">
+<security:authorize access="permitAll() and !hasRole('MANAGER') and !hasRole('CUSTOMER') and !hasRole('ADMINISTRATOR') and !hasRole('TRAINER')">
 
 <jstl:if test="${a==3}">
 
 <acme:list list="${gyms}" requestURI="gym/list.do" hidden_fields="customers,trainers,id,version,isDelete" 
-entityUrl="{activities: activity/listByGym.do,annotations: annotation/listByGym.do}" />
+entityUrl="{activities: activity/listByGym.do,annotations: annotation/listByGym.do}" 
+extraColumns="{avgStar: gym/avgStar.do}"/>
 
 </jstl:if>
 
@@ -34,7 +35,7 @@ entityUrl="{activities: activity/listByGym.do,annotations: annotation/listByGym.
 
 <acme:list list="${gyms}" requestURI="gym/list.do" hidden_fields="customers,trainers,id,version,isDelete" 
 entityUrl="{activities: activity/listByGym3.do,annotations: annotation/listByGym.do}" editUrl="gym/edit.do" deleteUrl="gym/delete.do"  
-extraColumns="{newActivity: manager/activity/create.do, addTrainer: manager/trainer/addByGym.do, newAnnotation: annotation/create.do}"/>
+extraColumns="{newActivity: manageractor/activity/create.do, addTrainer: manageractor/trainer/addByGym.do, newAnnotation: annotation/create.do, avgStar: gym/avgStar.do}"/>
 
 </jstl:if>
 
@@ -42,7 +43,7 @@ extraColumns="{newActivity: manager/activity/create.do, addTrainer: manager/trai
 
 <acme:list list="${gyms}" requestURI="gym/list.do" hidden_fields="customers,trainers,id,version,isDelete" 
 entityUrl="{activities: activity/listByGym3.do,annotations: annotation/listByGym.do}" 
-extraColumns="{newAnnotation: annotation/create.do}"/>
+extraColumns="{newAnnotation: annotation/create.do, avgStar: gym/avgStar.do}"/>
 
 </jstl:if>
 
@@ -50,8 +51,8 @@ extraColumns="{newAnnotation: annotation/create.do}"/>
 
 <acme:list list="${gyms}" requestURI="gym/list.do" hidden_fields="customers,trainers,id,version,isDelete" 
 entityUrl="{activities: activity/listByGym3.do,annotations: annotation/listByGym.do}" 
-extraColumns="{newAnnotation: annotation/create.do}"/>
-
+extraColumns="{newAnnotation: annotation/create.do, avgStar: gym/avgStar.do}"/>
+ 
 </jstl:if>
 
 </security:authorize>
@@ -62,7 +63,7 @@ extraColumns="{newAnnotation: annotation/create.do}"/>
 
 <acme:list list="${gyms}" requestURI="gym/list.do" hidden_fields="customers,trainers,id,version,isDelete" 
 entityUrl="{activities: activity/listByGym2.do,annotations: annotation/listByGym.do}" 
-extraColumns="{leave: customer/gym/leave.do, newAnnotation: annotation/create.do}"  />
+extraColumns="{leave: customer/gym/leave.do, newAnnotation: annotation/create.do, avgStar: gym/avgStar.do}"  />
 
 </jstl:if>
 
@@ -70,17 +71,10 @@ extraColumns="{leave: customer/gym/leave.do, newAnnotation: annotation/create.do
 
 <acme:list list="${gyms}" requestURI="gym/list.do" hidden_fields="customers,trainers,id,version,isDelete" 
 entityUrl="{activities: activity/listByGym.do,annotations: annotation/listByGym.do}" 
-extraColumns="{join: customer/gym/join.do, newAnnotation: annotation/create.do}" />
+extraColumns="{join: customer/gym/join.do, newAnnotation: annotation/create.do, avgStar: gym/avgStar.do}" />
 
 </jstl:if>
 
-<jstl:if test="${a==1}">
-
-<acme:list list="${gyms}" requestURI="gym/list.do" hidden_fields="customers,trainers,id,version,isDelete" 
-entityUrl="{activities: activity/listByGym.do,annotations: annotation/listByGym.do}" 
-extraColumns="{newAnnotation: annotation/create.do}"/>
-
-</jstl:if>
 
 </security:authorize>
 
@@ -89,7 +83,18 @@ extraColumns="{newAnnotation: annotation/create.do}"/>
 
 <acme:list list="${gyms}" requestURI="gym/list.do" hidden_fields="customers,trainers,id,version,isDelete" 
 entityUrl="{activities: activity/listByGym.do,annotations: annotation/listByGym.do}" 
-extraColumns="{newAnnotation: annotation/create.do}"/>
+extraColumns="{newAnnotation: annotation/create.do, avgStar: gym/avgStar.do}"/>
+
+
+</security:authorize>
+
+
+<security:authorize access="hasRole('TRAINER')">
+
+
+<acme:list list="${gyms}" requestURI="gym/list.do" hidden_fields="customers,trainers,id,version,isDelete" 
+entityUrl="{activities: activity/listByGym.do,annotations: annotation/listByGym.do}"
+extraColumns="{newAnnotation: annotation/create.do, avgStar: gym/avgStar.do}" />
 
 
 </security:authorize>

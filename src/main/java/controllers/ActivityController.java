@@ -16,7 +16,6 @@ import org.springframework.web.servlet.ModelAndView;
 import domain.Activity;
 import domain.Gym;
 import domain.Trainer;
-import security.LoginService;
 import services.ActivityService;
 import services.GymService;
 import services.TrainerService;
@@ -36,9 +35,6 @@ public class ActivityController extends AbstractController{
 	private GymService gymService;
 
 	@Autowired
-	private LoginService loginService;
-
-	@Autowired
 	private TrainerService trainerService;
 
 
@@ -49,7 +45,20 @@ public class ActivityController extends AbstractController{
 	}
 
 	//Actions
+	
+		
+	@RequestMapping("/avgStar")
+	public ModelAndView avgStar(@RequestParam Activity q) {
+		ModelAndView result;
 
+		result = new ModelAndView("activity/avgStar");
+		
+		result.addObject("avgStar", activityService.avgStar(q));
+
+		return result;
+	}
+
+	
 	@RequestMapping("/list")
 	public ModelAndView list(@RequestParam Integer a) {
 		ModelAndView result;
@@ -176,7 +185,6 @@ public class ActivityController extends AbstractController{
 			result.addObject("message", "activity.commit.error");
 		}else {
 			try {
-				System.out.println(activity.getPictures().get(0));
 				activityService.save(activity);
 				result=new ModelAndView("redirect:/welcome/index.do");
 			}catch (Throwable e) {

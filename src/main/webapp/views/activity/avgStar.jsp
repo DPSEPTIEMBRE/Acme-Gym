@@ -17,6 +17,9 @@
 <%@taglib prefix="display" uri="http://displaytag.sf.net"%>
 <%@taglib prefix="acme" tagdir="/WEB-INF/tags"%>
 
-<acme:acme_form url="trainer/save.do" entity="${trainer}" type="create" cancel="window.history.back()"
-hiddenFields="activities,annotationWriter,annotationStore" >
-</acme:acme_form>
+
+
+<h1> ${avgStar} </h1>
+<button type="button" class="btn btn-danger" onclick="window.history.back()">  <spring:message code="activity.back" /> </button>
+
+

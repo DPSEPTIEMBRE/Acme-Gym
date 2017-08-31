@@ -17,7 +17,6 @@ import domain.Gym;
 import repositories.CustomerRepository;
 import security.Authority;
 import security.UserAccount;
-import security.UserAccountRepository;
 
 @Service
 @Transactional
@@ -27,12 +26,6 @@ public class CustomerService {
 
 	@Autowired
 	private CustomerRepository customerRepository;
-
-//	@Autowired
-//	private Md5PasswordEncoder encoder;
-	
-	@Autowired
-	private UserAccountRepository userAccountRepository;
 	
 
 	//Constructor
@@ -113,13 +106,10 @@ public class CustomerService {
 			cust.setAnnotationStore(customer.getAnnotationStore());
 			cust.setAnnotationWriter(customer.getAnnotationWriter());
 			cust.setGyms(customer.getGyms());
-			cust.setUserAccount(customer.getUserAccount());
 			cust = customerRepository.save(cust);
 		}else{
-			UserAccount account = customer.getUserAccount();
-			account.setPassword(new Md5PasswordEncoder().encodePassword(account.getPassword(), null));
-			account= userAccountRepository.save(account);
-			customer.setUserAccount(account);
+			Md5PasswordEncoder encoder = new Md5PasswordEncoder();
+			customer.getUserAccount().setPassword(encoder.encodePassword(customer.getUserAccount().getPassword(), null));
 			cust = customerRepository.save(customer);
 		}
 		return cust;
@@ -132,19 +122,26 @@ public class CustomerService {
 	}
 
 	public Object[] minMaxAvgDesviationGymsByCustomers() {
-		return customerRepository.minMaxAvgDesviationGymsByCustomers();
+		Object[] a = customerRepository.minMaxAvgDesviationGymsByCustomers();
+		if(a[3]==null) {
+			a[3]=0.0;
+		}
+		return a;
 	}
 
 
 	public Object[] avgDesviationNotesByCustomers() {
-		return customerRepository.avgDesviationNotesByCustomers();
+		Object[] a = customerRepository.avgDesviationNotesByCustomers();
+		if(a[1]==null) {
+			a[1]=0.0;
+		}
+		return a;
 	}
 
 	public Object[] avgDesviationStarsByCustomers() {
 		Object[] res = customerRepository.avgDesviationStarsByCustomers();
-		 if(res==null) {
-			 Object[] aux = {0.0,0.0};
-			 res=aux;
+		 if(res[1]==null) {
+			 res[1]=0.0;
 		 }
 		return res;
 	}

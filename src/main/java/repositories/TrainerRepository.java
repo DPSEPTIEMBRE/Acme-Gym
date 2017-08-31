@@ -13,11 +13,11 @@ import domain.Trainer;
 public interface TrainerRepository extends JpaRepository<Trainer, Integer>  {
 	
 	//La media y desviación estándar del número de notas asociadas a entrenadores
-	@Query("select avg(c.annotationStore.size + c.annotationWriter.size) from Trainer c")
+	@Query("select avg(c.annotationStore.size + c.annotationWriter.size),stddev(c.annotationStore.size + c.annotationWriter.size) from Trainer c")
 	Object[] avgDesviationNotesByTrainers();
 	
 	//La media y desviación estándar del número de estrellas por entrenadores
-	@Query("select avg(s.rate) from Trainer c join c.annotationStore s")
+	@Query("select avg(s.rate),stddev(s.rate) from Trainer c join c.annotationStore s")
 	Object[] avgDesviationStarsByTrainers();
 	
 	//La media de estrellas por entrenador, agrupadas por país

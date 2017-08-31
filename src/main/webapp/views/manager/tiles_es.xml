@@ -10,9 +10,15 @@
 
 <tiles-definitions>
 
-	<definition name="manager/list" extends="master.page">
+	<definition name="manageractor/list" extends="master.page">
 		<put-attribute name="title" value="Lista de Managers" />
 		<put-attribute name="body" value="/views/manager/list.jsp" />
+	</definition>
+	
+		
+	<definition name="manageractor/avgStar" extends="master.page">
+		<put-attribute name="title" value="Media de Estrellas" />
+		<put-attribute name="body" value="/views/manager/avgStar.jsp" />
 	</definition>
 
 

@@ -22,7 +22,7 @@ public interface GymRepository extends JpaRepository<Gym, Integer>{
 	List<Gym> gymWithMoreActivities();
 
 	//El mínimo, máximo, media y desviación estándar del número de clientes por gimnasio
-	@Query("select min(g.customers.size), max(g.customers.size), avg(g.customers.size) from Gym g")
+	@Query("select min(g.customers.size), max(g.customers.size), avg(g.customers.size),stddev(g.customers.size) from Gym g")
 	Object[] minMaxAvgDesviationCustomersForGym();
 
 	//Notas asociadas a gimnasio
@@ -30,11 +30,11 @@ public interface GymRepository extends JpaRepository<Gym, Integer>{
 	List<Annotation> annotationsByGym(int gym_id);
 
 	//La media y desviación estándar del número de notas asociadas a gimnasios
-	@Query("select avg(c.annotations.size) from Gym c")
+	@Query("select avg(c.annotations.size),stddev(c.annotations.size) from Gym c")
 	Object[] avgDesviationNotesByGym();
 
 	//La media y desviación estándar del número de estrellas por gimnasio
-	@Query("select avg(s.rate) from Gym c join c.annotations s")
+	@Query("select avg(s.rate),stddev(s.rate)  from Gym c join c.annotations s")
 	Object[] avgDesviationStarsByGym();
 	
 	//Media estrellas asociadas a gimnasio

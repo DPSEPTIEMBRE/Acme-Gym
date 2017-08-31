@@ -22,23 +22,24 @@
 
 <jstl:if test="${a==1}">
 
-<acme:list list="${managers}" requestURI="manager/list.do" hidden_fields="gyms,userAccount,annotationWriter,id,version" 
-entityUrl="{annotationStore: annotation/listByManager.do}" extraColumns="{newAnnotation: annotation/create.do}" />
+<acme:list list="${managers}" requestURI="manageractor/list.do" hidden_fields="gyms,userAccount,annotationWriter,id,version" 
+entityUrl="{annotationStore: annotation/listByManager.do}" 
+extraColumns="{newAnnotation: annotation/create.do, avgStar: manageractor/avgStar.do}" />
 
 </jstl:if>
 
 <jstl:if test="${a==2}">
 
-<acme:list list="${managers}" requestURI="manager/list.do" hidden_fields="gyms,userAccount,annotationWriter,id,version" 
-extraColumns="{remove: administrator/manager/remove.do, newAnnotation: annotation/create.do}" 
+<acme:list list="${managers}" requestURI="manageractor/list.do" hidden_fields="gyms,userAccount,annotationWriter,id,version" 
+extraColumns="{remove: administrator/manageractor/remove.do, newAnnotation: annotation/create.do, avgStar: manageractor/avgStar.do}" 
 entityUrl="{annotationStore: annotation/listByManager.do}"/>
 
 </jstl:if>
 
 <jstl:if test="${a==3}">
 
-<acme:list list="${managers}" requestURI="manager/list.do" hidden_fields="gyms,userAccount,annotationWriter,id,version" 
-extraColumns="{admit: administrator/manager/admit.do, newAnnotation: annotation/create.do}" 
+<acme:list list="${managers}" requestURI="manageractor/list.do" hidden_fields="gyms,userAccount,annotationWriter,id,version" 
+extraColumns="{admit: administrator/manageractor/admit.do, newAnnotation: annotation/create.do, avgStar: manageractor/avgStar.do}" 
 entityUrl="{annotationStore: annotation/listByManager.do}"/>
 </jstl:if>
 

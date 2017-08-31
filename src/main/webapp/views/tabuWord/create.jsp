@@ -36,7 +36,7 @@
 		<spring:message code="activity.save" var="actorSaveHeader"/>
 		<spring:message code="activity.cancel" var="actorCancelHeader"/>
 		<input type="submit" class="btn btn-primary" name="save" value="${actorSaveHeader}" />
-		<input onclick="window.location='welcome/index.do';" class="btn btn-warning" type="button" name="cancel" value="${actorCancelHeader}"/>
+		<input onclick="window.history.back()" class="btn btn-warning" type="button" name="cancel" value="${actorCancelHeader}"/>
 		
 		
 	</form:form>

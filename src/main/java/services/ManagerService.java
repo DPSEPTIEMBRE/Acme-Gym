@@ -16,7 +16,6 @@ import domain.Manager;
 import repositories.ManagerRepository;
 import security.Authority;
 import security.UserAccount;
-import security.UserAccountRepository;
 
 @Service
 @Transactional
@@ -28,11 +27,6 @@ public class ManagerService {
 	@Autowired
 	private ManagerRepository managerRepository;
 
-	@Autowired
-	private UserAccountRepository userAccountRepository;
-
-//	@Autowired
-//	private Md5PasswordEncoder encoder;
 	
 
 	//Constructor
@@ -97,10 +91,9 @@ public class ManagerService {
 
 	public Manager save(Manager manager) {
 		Assert.notNull(manager);
-		Manager mana = null;
-
+		Manager mana = new Manager();
 		if(exists(manager.getId())){
-			
+
 			mana = findOne(manager.getId());
 			mana.setActorName(manager.getActorName());
 			mana.setCity(manager.getCity());
@@ -110,36 +103,34 @@ public class ManagerService {
 			mana.setPostalAddress(manager.getPostalAddress());
 			mana.setSurname(manager.getSurname());
 			mana.setGyms(manager.getGyms());
-			mana.setUserAccount(manager.getUserAccount());
-			
-			mana = managerRepository.save(mana);
-			
+			mana.setAnnotationStore(manager.getAnnotationStore());
+			mana.setAnnotationWriter(manager.getAnnotationWriter());
+			return  managerRepository.save(mana);
 
 		}else{
-			UserAccount account = manager.getUserAccount();
-			account.setPassword(new Md5PasswordEncoder().encodePassword(account.getPassword(), null));
-			account= userAccountRepository.save(account);
-			manager.setUserAccount(account);
-			mana = managerRepository.save(manager);
+			Md5PasswordEncoder encoder = new Md5PasswordEncoder();
+			manager.getUserAccount().setPassword(encoder.encodePassword(manager.getUserAccount().getPassword(), null));
+			return managerRepository.save(manager);
 		}
-		return mana;
 	}
 
 
 	//Others Methods
 
-
 	public Object[] avgDesviationStarsByManagers() {
 		Object[] res = managerRepository.avgDesviationStarsByManagers();
-		 if(res==null) {
-			 Object[] aux = {0.0,0.0};
-			 res=aux;
+		 if(res[1]==null) {
+			 res[1]=0.0;
 		 }
 		return res;
 	}
 
 	public Object[] avgDesviationNotesByManagers() {
-		return managerRepository.avgDesviationNotesByManagers();
+		Object[] res = managerRepository.avgDesviationNotesByManagers();
+		 if(res[1]==null) {
+			 res[1]=0.0;
+		 }
+		return res;
 	}
 
 	public Double avgStarsCountryByManagers() {
@@ -176,7 +167,11 @@ public class ManagerService {
 	}
 
 	public Object[] minMaxAvgDesviationGymsByManagers() {
-		return managerRepository.minMaxAvgDesviationGymsByManagers();
+		Object[] res = managerRepository.minMaxAvgDesviationGymsByManagers();
+		if(res[3]==null) {
+			res[3]=0.0;
+		}
+		return res;
 	}
 
 	public List<Annotation> annotationsByManager(Integer manager_id) {
@@ -186,6 +181,23 @@ public class ManagerService {
 	public Double avgStarsByManager(int manager_id) {
 		Assert.notNull(manager_id);
 		return managerRepository.avgStarsByManager(manager_id);
+	}
+
+	public Double avgStar(Manager a) {
+		Double res = 0.0;
+		Integer up=0;
+		Integer total=a.getAnnotationStore().size() + a.getAnnotationWriter().size();
+		
+		for(Annotation an : a.getAnnotationStore()) {
+			up= up + an.getRate();
+		}
+		for(Annotation an : a.getAnnotationWriter()) {
+			up= up + an.getRate();
+		}
+		
+		res=new Double(up/total);
+		
+		return res;
 	}
 
 

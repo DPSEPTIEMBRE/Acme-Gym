@@ -28,10 +28,10 @@ public class CustomerController extends AbstractController{
 
 	@Autowired
 	private LoginService loginService;
-	
+
 	@Autowired
 	private GymService gymService;
-	
+
 	@Autowired
 	private ActivityService activityService;
 
@@ -55,21 +55,24 @@ public class CustomerController extends AbstractController{
 
 		return result;
 	}
-	
+
 	@RequestMapping("/gym/join")
 	public ModelAndView joinGym(@RequestParam Integer q) {
 		ModelAndView result;
 
 		Gym gym= gymService.findOne(q);
 		Customer actual=(Customer)loginService.findActorByUserName(LoginService.getPrincipal().getId());
-		
+
 		List<Customer> customers= gym.getCustomers();
 		List<Gym> gyms= actual.getGyms();
-		customers.add(actual);
-		gym.setCustomers(customers);
-		gyms.add(gym);
-		actual.setGyms(gyms);
-		
+
+		if(!gyms.contains(gym)) {
+			customers.add(actual);
+			gym.setCustomers(customers);
+			gyms.add(gym);
+			actual.setGyms(gyms);
+		}
+
 		try {
 			gymService.save(gym);
 			customerService.save(actual);
@@ -77,26 +80,30 @@ public class CustomerController extends AbstractController{
 		}catch (Throwable e) {
 			result = new ModelAndView("gym/list");
 			result.addObject("gyms", actual.getGyms());
-			result.addObject("a", 2);
+			result.addObject("a", 1);
 		}
 
 		return result;
 	}
-	
+
 	@RequestMapping("/gym/leave")
 	public ModelAndView leaveGym(@RequestParam Integer q) {
 		ModelAndView result;
 
 		Gym gym= gymService.findOne(q);
 		Customer actual=(Customer)loginService.findActorByUserName(LoginService.getPrincipal().getId());
-		
+
+
 		List<Customer> customers= gym.getCustomers();
 		List<Gym> gyms= actual.getGyms();
-		customers.remove(actual);
-		gym.setCustomers(customers);
-		gyms.remove(gym);
-		actual.setGyms(gyms);
-		
+		if(gyms.contains(gym)) {
+			customers.remove(actual);
+			gym.setCustomers(customers);
+			gyms.remove(gym);
+			actual.setGyms(gyms);
+		}
+
+
 		try {
 			gymService.save(gym);
 			customerService.save(actual);
@@ -104,13 +111,13 @@ public class CustomerController extends AbstractController{
 		}catch (Throwable e) {
 			result = new ModelAndView("gym/list");
 			result.addObject("gyms", actual.getGyms());
-			result.addObject("a", 2);
+			result.addObject("a", 1);
 		}
 
 		return result;
 	}
-	
-	
+
+
 	@RequestMapping("/activity/list")
 	public ModelAndView listActivities(@RequestParam Integer q,@RequestParam Integer a) {
 		ModelAndView result;
@@ -134,30 +141,31 @@ public class CustomerController extends AbstractController{
 				}
 			}
 		}
-		
-		
-		
+
+
+
 		result = new ModelAndView("activity/list");
 		result.addObject("activities", activitiesLeave);
 		result.addObject("a", a);
 
 		return result;
 	}
-	
-	
+
+
 	@RequestMapping("/activity/join")
 	public ModelAndView joinActivity(@RequestParam Integer q) {
 		ModelAndView result;
-
 		Activity act= activityService.findOne(q);
-		Customer actual=(Customer)loginService.findActorByUserName(LoginService.getPrincipal().getId());
-		List<Customer> customers=act.getCustomers();
-		customers.add(actual);
-		act.setCustomers(customers);
-
+		if(act.getNumSeats() > 0) {
+			Customer actual=(Customer)loginService.findActorByUserName(LoginService.getPrincipal().getId());
+			List<Customer> customers=act.getCustomers();
+			customers.add(actual);
+			act.setCustomers(customers);
+			act.setNumSeats(act.getNumSeats() - 1);
+		}
 		try {
 			activityService.save(act);
-			
+
 			result = new ModelAndView("redirect:/welcome/index.do");
 		}catch (Throwable e) {
 			result = new ModelAndView("redirect:/welcome/index.do");
@@ -165,7 +173,7 @@ public class CustomerController extends AbstractController{
 
 		return result;
 	}
-	
+
 	@RequestMapping("/activity/leave")
 	public ModelAndView leaveActivity(@RequestParam Integer q) {
 		ModelAndView result;
@@ -175,10 +183,11 @@ public class CustomerController extends AbstractController{
 		List<Customer> customers=act.getCustomers();
 		customers.remove(actual);
 		act.setCustomers(customers);
+		act.setNumSeats(act.getNumSeats() + 1);
 
 		try {
 			activityService.save(act);
-			
+
 			result = new ModelAndView("redirect:/welcome/index.do");
 		}catch (Throwable e) {
 			result = new ModelAndView("redirect:/welcome/index.do");
@@ -186,6 +195,6 @@ public class CustomerController extends AbstractController{
 
 		return result;
 	}
-	
-	
+
+
 }
